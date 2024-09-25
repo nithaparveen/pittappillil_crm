@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:pittappillil_crm/app_config/app_config.dart';
+import 'package:pittappillil_crm/presentation/bottom_navigation_screen/controller/bottom_navigation_controller.dart';
+import 'package:pittappillil_crm/presentation/bottom_navigation_screen/view/bottom_navigation_screen.dart';
+import 'package:pittappillil_crm/presentation/login_screen/controller/login_controller.dart';
+import 'package:pittappillil_crm/presentation/login_screen/view/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? loggedIn = prefs.getBool(AppConfig.loggedIn);
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => BottomNavigationController()),
+    ChangeNotifierProvider(create: (context) => LoginController()),
+  ], child: MyApp(isLoggedIn: loggedIn ?? false)));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key, required this.isLoggedIn});
+  final bool isLoggedIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: isLoggedIn ? const NavigationBarScreen() : const LoginScreen(),
+    );
+  }
+}
