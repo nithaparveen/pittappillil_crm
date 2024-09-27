@@ -31,7 +31,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
   Widget build(BuildContext context) {
     return Consumer<InventoryListController>(builder: (context, controller, _) {
       return controller.isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
               child: ListView.builder(
@@ -58,7 +58,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                               children: [
                                 const Icon(Icons.sticky_note_2_outlined,
                                     size: 12, color: Colors.white),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Text(

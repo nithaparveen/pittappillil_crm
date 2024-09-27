@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -10,17 +11,19 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final double? width;
   final double? height;
+  final void Function(String)? onChanged; // Make onChanged optional
 
   const CustomTextField({
     super.key,
     this.controller,
-    this.hintText , // Default hint text
+    this.hintText, // Default hint text
     this.prefixIcon,
     this.suffixIcon,
     this.isPasswordField = false, // Default is not a password field
     this.keyboardType,
     this.width,
     this.height, // Specify keyboard type
+    this.onChanged, // Include onChanged parameter
   });
 
   @override
@@ -30,18 +33,19 @@ class CustomTextField extends StatelessWidget {
       width: width,
       child: TextFormField(
         controller: controller,
-        obscureText: isPasswordField, // Obscure text for password fields
-        keyboardType: keyboardType ?? TextInputType.text, // Set input type
+        obscureText: isPasswordField,
+        keyboardType: keyboardType ?? TextInputType.text,
         style: GLTextStyles.montserratStyle(
           weight: FontWeight.w400,
           size: 14,
           color: const Color(0xff9c9c9c),
         ),
-        cursorColor: Colors.greenAccent,
+        cursorColor: ColorTheme.pRedOrange,
+        onChanged: onChanged, // Use onChanged here
         decoration: InputDecoration(
-          prefixIcon: prefixIcon, 
+          prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-          contentPadding: const EdgeInsets.symmetric(vertical: 12,horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(

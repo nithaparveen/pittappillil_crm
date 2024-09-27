@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
-import 'package:pittappillil_crm/global_widgets/textfield1.dart';
+import 'package:pittappillil_crm/global_widgets/textfield.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
