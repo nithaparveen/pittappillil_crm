@@ -10,16 +10,11 @@ import '../constants/textstyles.dart';
 
 class AppUtils {
   static Future<String?> getToken() async {
-    log("AppUtils -> getToken()");
-    final sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.get(AppConfig.token) != null) {
-      final access =
-      jsonDecode(sharedPreferences.get(AppConfig.token) as String);
-      log("Token -> $access");
-      return access;
-    } else {
-      return null;
-    }
+     log("getUserToken()");
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString(AppConfig.token);
+    log("getUserToken -> $token");
+    return token;
   }
 
   static oneTimeSnackBar(

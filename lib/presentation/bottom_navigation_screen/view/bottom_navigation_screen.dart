@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pittappillil_crm/core/constants/colors.dart';
-import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/presentation/display_screen/view/display_screen.dart';
 import 'package:pittappillil_crm/presentation/inventory_screen/view/inventory_screen.dart';
 import 'package:provider/provider.dart';

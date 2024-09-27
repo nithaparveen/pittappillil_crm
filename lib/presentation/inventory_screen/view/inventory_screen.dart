@@ -10,6 +10,7 @@ import 'package:pittappillil_crm/presentation/login_screen/view/login_screen.dar
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../app_config/app_config.dart';
+import 'widgets/inventory_list_screen copy.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -90,7 +91,7 @@ class _InventoryScreenState extends State<InventoryScreen>
         controller: tabController,
         children: const [
           AddInvoiceScreen(),
-          InventoryListScreen(),
+          InventoryListScreenV2(),
         ],
       ),
     );

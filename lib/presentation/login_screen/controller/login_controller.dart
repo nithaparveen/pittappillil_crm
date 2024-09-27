@@ -21,12 +21,14 @@ class LoginController extends ChangeNotifier {
       if (value["status"] == "success") {
         log("token -> ${value["data"]["auth_token"]} ");
         storeLoginData(value);
-        storeUserToken(value["data"]["auth_token"]);
+        final String authToken = value["data"]["auth_token"];
+        log("authToken -> $authToken");
+        storeUserToken(authToken);
         final int userId = value["data"]["user"]["user_id"];
         log("userId -> $userId");
         storeUserId(userId);
         AppUtils.oneTimeSnackBar(
-          "LoggedIn Successfully",
+          "Logged in Successfully",
           context: context,
           bgColor: const Color.fromARGB(255, 97, 182, 86),
         );
@@ -57,11 +59,10 @@ class LoginController extends ChangeNotifier {
     sharedPreferences.setBool(AppConfig.loggedIn, true);
   }
 
-  void storeUserToken(resData) async {
+  void storeUserToken(String token) async {
     log("storeUserToken()");
     sharedPreferences = await SharedPreferences.getInstance();
-    String dataUser = json.encode(resData);
-    sharedPreferences.setString(AppConfig.token, dataUser);
+    sharedPreferences.setString(AppConfig.token, token);
   }
 
   Future<void> storeUserId(int userId) async {

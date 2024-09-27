@@ -71,11 +71,11 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                           prefixIcon: Icon(Icons.shopping_bag,
                               size: 18, color: Color(0xff9c9c9c)),
                           suffixIcon: Icon(Icons.arrow_drop_down,
-                              size: 18, color: Color(0xff9c9c9c)),
+                              size: 18, color: Color(0xff9c9c9c)),  
                         ),
                         const SizedBox(height: 10),
                         const CustomTextField(
-                          width: 307.0,
+                          width: 307.0,     
                           height: 45.0,
                           hintText: "Barcode Indoor",
                           prefixIcon: Icon(Icons.qr_code_scanner_outlined,
