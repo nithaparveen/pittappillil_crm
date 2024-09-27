@@ -17,7 +17,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => BottomNavigationController()),
     ChangeNotifierProvider(create: (context) => LoginController()),
     ChangeNotifierProvider(create: (context) => InventoryListController()),
-    ChangeNotifierProvider(create: (_) => ScanScreenController()),
+    ChangeNotifierProvider(create: (context) => ScanScreenController()),
   ], child: MyApp(isLoggedIn: loggedIn ?? false)));
 }
 

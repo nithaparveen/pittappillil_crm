@@ -5,25 +5,29 @@ import 'package:pittappillil_crm/core/constants/textstyles.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText;
-  final Icon? prefixIcon;
-  final Icon? suffixIcon;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final bool isPasswordField;
   final TextInputType? keyboardType;
   final double? width;
   final double? height;
-  final void Function(String)? onChanged; // Make onChanged optional
+  final void Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
     this.controller,
-    this.hintText, // Default hint text
+    this.hintText,
     this.prefixIcon,
     this.suffixIcon,
-    this.isPasswordField = false, // Default is not a password field
+    this.isPasswordField = false,
     this.keyboardType,
     this.width,
-    this.height, // Specify keyboard type
-    this.onChanged, // Include onChanged parameter
+    this.height,
+    this.onChanged,
+    this.onTap,
+    this.readOnly = false,
   });
 
   @override
@@ -41,7 +45,9 @@ class CustomTextField extends StatelessWidget {
           color: const Color(0xff9c9c9c),
         ),
         cursorColor: ColorTheme.pRedOrange,
-        onChanged: onChanged, // Use onChanged here
+        onChanged: onChanged,
+        onTap: onTap,
+        readOnly: readOnly,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,

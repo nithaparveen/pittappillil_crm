@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
-import 'package:provider/provider.dart';
 
 class BarcodeScanScreen extends StatefulWidget {
   const BarcodeScanScreen({super.key});
@@ -14,12 +15,46 @@ class BarcodeScanScreen extends StatefulWidget {
 }
 
 class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
+  TextEditingController indoorController = TextEditingController();
+  TextEditingController outdoorController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ScanScreenController>().fetchData(context);
     });
+  }
+
+  @override
+  void dispose() {
+    indoorController.dispose();
+    outdoorController.dispose();
+    super.dispose();
+  }
+
+  // Open scanner dialog to scan barcode and set the scanned value to the appropriate text field controller
+  void _openBarcodeScanner({required TextEditingController controller}) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: SizedBox(
+          width: 300,
+          height: 300,
+          child: MobileScanner(
+            onDetect: (BarcodeCapture capture) {
+              final String? code = capture.barcodes.first.rawValue;
+              if (code != null) {
+                setState(() {
+                  controller.text = code; // Set the scanned code to the controller
+                });
+                Navigator.of(context).pop(); // Close the scanner dialog
+              }
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -59,27 +94,27 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 32, right: 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 200),
-                  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Select Brand and Category",
-                          style: GLTextStyles.montserratStyle(
-                              size: 15,
-                              weight: FontWeight.w600,
-                              color: ColorTheme.pBlue),
-                        ),
-                        const SizedBox(height: 18),
-                        Consumer<ScanScreenController>(
-                          builder: (context, controller, _) {
-                            return Column(
+            Consumer<ScanScreenController>(
+              builder: (context, controller, _) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 200),
+                      Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Select Brand and Category",
+                              style: GLTextStyles.montserratStyle(
+                                  size: 15,
+                                  weight: FontWeight.w600,
+                                  color: ColorTheme.pBlue),
+                            ),
+                            const SizedBox(height: 18),
+                            Column(
                               children: [
                                 CustomTextField(
                                   width: 307.0,
@@ -87,8 +122,10 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                   hintText: "Select Product",
                                   prefixIcon: const Icon(Icons.shopping_bag,
                                       size: 18, color: Color(0xff9c9c9c)),
-                                  suffixIcon: const Icon(Icons.manage_search_rounded,
-                                      size: 19, color: Color(0xff9c9c9c)),
+                                  suffixIcon: const Icon(
+                                      Icons.manage_search_rounded,
+                                      size: 19,
+                                      color: Color(0xff9c9c9c)),
                                   controller: controller.searchController,
                                   onChanged: (value) {
                                     controller.searchProducts(value);
@@ -97,7 +134,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                 if (controller.isListVisible)
                                   Container(
                                     width: 307.0,
-                                    constraints: const BoxConstraints(maxHeight: 180),
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 180),
                                     decoration: BoxDecoration(
                                       border: Border.all(color: Colors.grey),
                                       borderRadius: BorderRadius.circular(5),
@@ -115,7 +153,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                             style: GLTextStyles.montserratStyle(
                                               weight: FontWeight.w500,
                                               size: 13,
-                                              color: const Color.fromARGB(255, 131, 131, 131),
+                                              color: const Color.fromARGB(
+                                                  255, 131, 131, 131),
                                             ),
                                           ),
                                           subtitle: Text(
@@ -134,46 +173,64 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                     ),
                                   ),
                               ],
-                            );
-                          },
+                            ),
+                            const SizedBox(height: 10),
+                            CustomTextField(
+                              width: 307.0,
+                              height: 45.0,
+                              hintText: "Barcode Indoor",
+                              prefixIcon: const Icon(
+                                  Icons.qr_code_scanner_outlined,
+                                  size: 18,
+                                  color: Color(0xff9c9c9c)),
+                              readOnly: true,
+                              controller: indoorController,
+                              onTap: () {
+                                _openBarcodeScanner(
+                                    controller: indoorController);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            CustomTextField(
+                              width: 307.0,
+                              height: 45.0,
+                              hintText: "Barcode Outdoor",
+                              prefixIcon: const Icon(
+                                  Icons.qr_code_scanner_outlined,
+                                  size: 18,
+                                  color: Color(0xff9c9c9c)),
+                              readOnly: true,
+                              controller: outdoorController,
+                              onTap: () {
+                                _openBarcodeScanner(
+                                    controller: outdoorController);
+                              },
+                            ),
+                            const SizedBox(height: 10),
+                            const CustomTextField(
+                              width: 307.0,
+                              height: 45.0,
+                              hintText: "Remarks",
+                              prefixIcon: Icon(Icons.category_sharp,
+                                  size: 18, color: Color(0xff9c9c9c)),
+                            ),
+                            const SizedBox(height: 10),
+                            CustomButton(
+                              width: 307.0,
+                              height: 48.0,
+                              text: "Submit",
+                              onPressed: () {
+                                // Handle form submission here
+                              },
+                              backgroundColor: Colors.white,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 10),
-                        const CustomTextField(
-                          width: 307.0,
-                          height: 45.0,
-                          hintText: "Barcode Indoor",
-                          prefixIcon: Icon(Icons.qr_code_scanner_outlined,
-                              size: 18, color: Color(0xff9c9c9c)),
-                        ),
-                        const SizedBox(height: 10),
-                        const CustomTextField(
-                          width: 307.0,
-                          height: 45.0,
-                          hintText: "Barcode Outdoor",
-                          prefixIcon: Icon(Icons.qr_code_scanner_outlined,
-                              size: 18, color: Color(0xff9c9c9c)),
-                        ),
-                        const SizedBox(height: 10),
-                        const CustomTextField(
-                          width: 307.0,
-                          height: 45.0,
-                          hintText: "Remarks",
-                          prefixIcon: Icon(Icons.category_sharp,
-                              size: 18, color: Color(0xff9c9c9c)),
-                        ),
-                        const SizedBox(height: 10),
-                        CustomButton(
-                          width: 307.0,
-                          height: 48.0,
-                          text: "Submit",
-                          onPressed: () {},
-                          backgroundColor: Colors.white,
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
