@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pittappillil_crm/app_config/app_config.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
 import 'package:pittappillil_crm/presentation/bottom_navigation_screen/controller/bottom_navigation_controller.dart';
@@ -27,9 +28,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: isLoggedIn ? const NavigationBarScreen() : const LoginScreen(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 783), 
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: isLoggedIn ? const NavigationBarScreen() : const LoginScreen(),
+      ),
     );
   }
 }
