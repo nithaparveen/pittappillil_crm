@@ -33,30 +33,6 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     super.dispose();
   }
 
-  // Open scanner dialog to scan barcode and set the scanned value to the appropriate text field controller
-  void _openBarcodeScanner({required TextEditingController controller}) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        child: SizedBox(
-          width: 300,
-          height: 300,
-          child: MobileScanner(
-            onDetect: (BarcodeCapture capture) {
-              final String? code = capture.barcodes.first.rawValue;
-              if (code != null) {
-                setState(() {
-                  controller.text = code; // Set the scanned code to the controller
-                });
-                Navigator.of(context).pop(); // Close the scanner dialog
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,7 +162,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               readOnly: true,
                               controller: indoorController,
                               onTap: () {
-                                _openBarcodeScanner(
+                                openBarcodeScanner(
                                     controller: indoorController);
                               },
                             ),
@@ -202,7 +178,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               readOnly: true,
                               controller: outdoorController,
                               onTap: () {
-                                _openBarcodeScanner(
+                                openBarcodeScanner(
                                     controller: outdoorController);
                               },
                             ),
@@ -211,7 +187,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               width: 307.0,
                               height: 45.0,
                               hintText: "Remarks",
-                              prefixIcon: Icon(Icons.category_sharp,
+                              prefixIcon: Icon(Icons.sticky_note_2_rounded,
                                   size: 18, color: Color(0xff9c9c9c)),
                             ),
                             const SizedBox(height: 10),
@@ -220,7 +196,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               height: 48.0,
                               text: "Submit",
                               onPressed: () {
-                                // Handle form submission here
+                               
                               },
                               backgroundColor: Colors.white,
                             ),
@@ -233,6 +209,29 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void openBarcodeScanner({required TextEditingController controller}) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: SizedBox(
+          width: 300,
+          height: 300,
+          child: MobileScanner(
+            onDetect: (BarcodeCapture capture) {
+              final String? code = capture.barcodes.first.rawValue;
+              if (code != null) {
+                setState(() {
+                  controller.text = code;
+                });
+                Navigator.of(context).pop();
+              }
+            },
+          ),
         ),
       ),
     );

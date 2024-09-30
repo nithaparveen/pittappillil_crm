@@ -43,6 +43,7 @@ dependencies:
   path_provider: ^2.0.10
   mobile_scanner: ^5.1.1
   flutter_screenutil: ^5.9.3
+  shimmer: ^3.0.0
   
 
 dev_dependencies:

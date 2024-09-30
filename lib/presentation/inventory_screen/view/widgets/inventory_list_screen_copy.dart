@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
+import 'package:pittappillil_crm/global_widgets/shimmer_effect.dart';
 import 'package:pittappillil_crm/presentation/inventory_screen/controller/inventory_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
@@ -30,8 +31,9 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
   @override
   Widget build(BuildContext context) {
     return Consumer<InventoryListController>(builder: (context, controller, _) {
+      var size = MediaQuery.sizeOf(context);
       return controller.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? ShimmerEffect(size: size)
           : Padding(
               padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
               child: ListView.builder(
