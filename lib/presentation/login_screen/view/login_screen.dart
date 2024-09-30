@@ -124,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: 307.0,
                           height: 42.0,
                           text: "Log in",
+                          backgroundColor: Colors.white,
                           onPressed: () {
                             Provider.of<LoginController>(context, listen: false)
                                 .onLogin(emailController.text.trim(),

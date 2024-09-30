@@ -5,7 +5,6 @@ import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/presentation/inventory_screen/view/widgets/add_invoice_screen.dart';
-import 'package:pittappillil_crm/presentation/inventory_screen/view/widgets/inventory_list_screen.dart';
 import 'package:pittappillil_crm/presentation/login_screen/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,7 +40,10 @@ class _InventoryScreenState extends State<InventoryScreen>
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: SizedBox(
-            height: 15, width: 20, child: Image.asset("assets/logo2.png")),
+          height: 15,
+          width: 20,
+          child: Image.asset("assets/logo2.png"),
+        ),
         title: Text(
           "PACE-X !",
           style: GLTextStyles.montserratStyle(

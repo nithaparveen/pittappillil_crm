@@ -164,7 +164,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     });
   }
 
-  void openBarcodeScanner({required TextEditingController controller}) {
+void openBarcodeScanner({required TextEditingController controller}) {
   showDialog(
     context: context,
     builder: (context) => Dialog(
@@ -175,11 +175,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
           onDetect: (BarcodeCapture capture) {
             final String? code = capture.barcodes.first.rawValue;
             if (code != null) {
-              if (mounted) {  
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
+              if (mounted) {
                 setState(() {
                   controller.text = code;
                 });
-                Navigator.of(context).pop();
               }
             }
           },
@@ -188,6 +190,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     ),
   );
 }
+
 
   void showDatePicker(BuildContext context) {
     showCupertinoModalPopup(

@@ -177,34 +177,36 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                   ],
                                 ),
                                 const SizedBox(width: 16),
-                                Flexible(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        Icons.qr_code_scanner,
-                                        size: 16,
-                                        color: Colors.grey[700],
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Flexible(
-                                        child: Text(
-                                          "${controller.inventoryList[index].barcode2 ?? "N/A"} "
-                                              .toUpperCase(),
-                                          style: GLTextStyles.robotoStyle(
-                                            color: ColorTheme.pBlue,
-                                            size: 12,
-                                            weight: FontWeight.w400,
-                                          ),
-                                          softWrap:
-                                              true, // Enable wrapping to fit in the available space
+                                if (controller.inventoryList[index].barcode2 !=
+                                    null)
+                                  Flexible(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.qr_code_scanner,
+                                          size: 16,
+                                          color: Colors.grey[700],
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(width: 4),
+                                        Flexible(
+                                          child: Text(
+                                            "${controller.inventoryList[index].barcode2}"
+                                                .toUpperCase(),
+                                            style: GLTextStyles.robotoStyle(
+                                              color: ColorTheme.pBlue,
+                                              size: 12,
+                                              weight: FontWeight.w400,
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
                               ],
                             )
                           ],

@@ -42,7 +42,7 @@ class CustomTextField extends StatelessWidget {
         style: GLTextStyles.montserratStyle(
           weight: FontWeight.w400,
           size: 14,
-          color: const Color(0xff9c9c9c),
+          color: const Color.fromARGB(255, 105, 105, 105),
         ),
         cursorColor: ColorTheme.pRedOrange,
         onChanged: onChanged,

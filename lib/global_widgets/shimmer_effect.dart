@@ -9,7 +9,7 @@ class ShimmerEffect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
         itemCount: 5,
         itemBuilder: (context, index) {
@@ -24,19 +24,19 @@ class ShimmerEffect extends StatelessWidget {
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 20.0,
+                      height: 30.0,
                       color: Colors.white,
                     ),
                     const SizedBox(height: 10),
                     Container(
                       width: 150.0,
-                      height: 20.0,
+                      height: 30.0,
                       color: Colors.white,
                     ),
                     const SizedBox(height: 20),
                     Container(
                       width: double.infinity,
-                      height: 20.0,
+                      height: 30.0,
                       color: Colors.white,
                     ),
                   ],

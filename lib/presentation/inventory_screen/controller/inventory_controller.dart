@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:pittappillil_crm/app_config/app_config.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/utils/app_utils.dart';
 import 'package:pittappillil_crm/repository/api/inventory_list_screen/service/inventory_list_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../repository/api/inventory_list_screen/model/inventoryModel.dart';
 
@@ -63,13 +60,5 @@ class InventoryListController extends ChangeNotifier {
       isMoreLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<String?> getUserToken() async {
-    log("getUserToken()");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? token = sharedPreferences.getString(AppConfig.token);
-    log("getUserToken -> $token");
-    return token;
   }
 }

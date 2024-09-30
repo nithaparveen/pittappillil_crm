@@ -15,7 +15,7 @@ class AddInvoiceScreen extends StatefulWidget {
 }
 
 class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
-  var invoiceController = TextEditingController();
+  var invoiceController = TextEditingController(text: "EDDG-F6SI");
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +24,17 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(35.0.w), // Use w method for padding
+        padding: EdgeInsets.all(35.0.w),
         child: Column(
           children: [
             Text(
               "Scan your Invoice Number",
               style: GLTextStyles.montserratStyle(
-                  size: 16.sp, // Use sp method for font size
+                  size: 16.sp,
                   weight: FontWeight.w600,
                   color: ColorTheme.pBlue),
             ),
-            SizedBox(height: 15.h), // Use h method for vertical spacing
+            SizedBox(height: 15.h),
             Image.asset(
               "assets/scan_invoice.png",
               width: 200.w, // Set width using w method (optional)
