@@ -1,14 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
-import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
+import 'package:pittappillil_crm/global_widgets/logout_button.dart';
 import 'package:pittappillil_crm/presentation/inventory_screen/view/widgets/add_invoice_screen.dart';
-import 'package:pittappillil_crm/presentation/login_screen/view/login_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../app_config/app_config.dart';
 import 'widgets/inventory_list_screen_copy.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -55,16 +49,7 @@ class _InventoryScreenState extends State<InventoryScreen>
           ),
           textAlign: TextAlign.left,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.logout_outlined,
-              size: 20,
-              color: Colors.black,
-            ),
-            onPressed: () => logoutConfirmation(),
-          ),
-        ],
+        actions: const [LogoutButton()],
         centerTitle: true,
         forceMaterialTransparency: true,
         automaticallyImplyLeading: false,
@@ -96,59 +81,6 @@ class _InventoryScreenState extends State<InventoryScreen>
           InventoryListScreenV2(),
         ],
       ),
-    );
-  }
-
-  Future<void> logout(BuildContext context) async {
-    log("Logout");
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.remove(AppConfig.token);
-    sharedPreferences.setBool(AppConfig.loggedIn, false);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (route) => false);
-  }
-
-  void logoutConfirmation() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          surfaceTintColor: Colors.white,
-          title: Text(
-            'Confirm Logout',
-            style: GLTextStyles.montserratStyle(
-                color: ColorTheme.pRedOrange,
-                size: 16,
-                weight: FontWeight.w500),
-          ),
-          content: Text('Are you sure you want to log out?',
-              style: GLTextStyles.montserratStyle(
-                  color: ColorTheme.pBlue, size: 14, weight: FontWeight.w400)),
-          actions: <Widget>[
-            CustomButton(
-              borderColor: ColorTheme.pRed,
-              backgroundColor: ColorTheme.white,
-              text: "Cancel",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CustomButton(
-              borderColor: ColorTheme.white,
-              backgroundColor: ColorTheme.pRed,
-              text: "Confirm",
-              textColor: Colors.white,
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await logout(context);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

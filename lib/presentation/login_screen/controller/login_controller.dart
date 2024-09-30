@@ -1,12 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/presentation/bottom_navigation_screen/view/bottom_navigation_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../app_config/app_config.dart';
-import '../../../core/constants/colors.dart';
 import '../../../core/utils/app_utils.dart';
 import '../../../repository/api/login_screen/service/login_service.dart';
 
