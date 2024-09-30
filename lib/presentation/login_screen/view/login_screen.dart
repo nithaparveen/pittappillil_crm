@@ -5,6 +5,7 @@ import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/login_screen/controller/login_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +17,48 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  double scale = 1.0;
+  bool isAnimating = false;
+  bool isLoginPressed = false;
+
+  void animateButton() {
+    if (!isAnimating) {
+      setState(() {
+        isAnimating = true;
+        scale = 0.9;
+      });
+
+      Future.delayed(const Duration(milliseconds: 150), () {
+        setState(() {
+          scale = 1.0;
+          isAnimating = false;
+        });
+      });
+    }
+  }
+
+  String? validateEmail(String? value) {
+    if (isLoginPressed) {
+      if (value == null || value.isEmpty) {
+        return 'Please enter your email';
+      }
+      final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+      if (!emailRegExp.hasMatch(value)) {
+        return 'Please enter a valid email address';
+      }
+    }
+    return null;
+  }
+
+  String? validatePassword(String? value) {
+    if (isLoginPressed) {
+      if (value == null || value.isEmpty) {
+        return 'Password is required';
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,15 +84,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Positioned(
-                top: 65,
-                right: 32,
-                child: Container(
-                  height: 65,
-                  width: 58,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/logo.png"))),
-                )),
+              top: 65,
+              right: 32,
+              child: Container(
+                height: 65,
+                width: 58,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/logo.png"),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 32, right: 32),
               child: Column(
@@ -62,7 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       size: 30,
                       weight: FontWeight.w400,
                       color: ColorTheme.pink,
-                      // height: 68 / 39,
                       letterSpacing: -0.3,
                     ),
                     textAlign: TextAlign.left,
@@ -73,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       size: 42,
                       weight: FontWeight.w700,
                       color: ColorTheme.pink,
-                      // height: 68 / 39,
                       letterSpacing: -0.3,
                     ),
                     textAlign: TextAlign.left,
@@ -85,8 +129,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       size: 14,
                       weight: FontWeight.w400,
                       color: ColorTheme.black,
-                      // height: 68 / 39,
-                      // letterSpacing: -0.3,
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -101,10 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Email ID",
                           prefixIcon: const Icon(
                             Icons.email_outlined,
-                            size: 20,
+                            size: 18,
                             color: Color(0xff9c9c9c),
                           ),
                           keyboardType: TextInputType.emailAddress,
+                          validator: validateEmail,
                         ),
                         const SizedBox(height: 10),
                         CustomTextField(
@@ -114,31 +157,55 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Password",
                           prefixIcon: const Icon(
                             Icons.lock_outline_rounded,
-                            size: 20,
+                            size: 18,
                             color: Color(0xff9c9c9c),
                           ),
                           isPasswordField: true,
+                          validator: validatePassword,
                         ),
                         const SizedBox(height: 10),
-                        CustomButton(
-                          width: 307.0,
-                          height: 42.0,
-                          text: "Log in",
-                          backgroundColor: Colors.white,
-                          onPressed: () {
-                            Provider.of<LoginController>(context, listen: false)
-                                .onLogin(emailController.text.trim(),
-                                    passwordController.text.trim(), context);
-                          },
+                        AnimatedScale(
+                          scale: scale,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          child: CustomButton(
+                            width: 307.0,
+                            height: 42.0,
+                            text: "Log in",
+                            backgroundColor: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                isLoginPressed = true;
+                              });
+                              animateButton();
+                              Provider.of<LoginController>(context,
+                                      listen: false)
+                                  .onLogin(
+                                emailController.text.trim(),
+                                passwordController.text.trim(),
+                                context,
+                              );
+                            },
+                          ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            const url =
+                                'https://crm.pittappillilonline.com/forgot-password';
+                            if (await canLaunchUrl(Uri.parse(url))) {
+                              await launchUrl(Uri.parse(url),
+                                  mode: LaunchMode.externalApplication);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          },
                           child: Text(
                             "Forgot Password ?",
                             style: GLTextStyles.interStyle(
-                                size: 12,
-                                weight: FontWeight.w400,
-                                color: const Color(0xff7f7f7f)),
+                              size: 12,
+                              weight: FontWeight.w400,
+                              color: const Color(0xff7f7f7f),
+                            ),
                           ),
                         )
                       ],

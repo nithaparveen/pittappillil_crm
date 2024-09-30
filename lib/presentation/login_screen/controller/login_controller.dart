@@ -39,8 +39,8 @@ class LoginController extends ChangeNotifier {
             ),
             (route) => false);
       } else {
-        AppUtils.oneTimeSnackBar("Password mismatch",
-            context: context, bgColor: ColorTheme.red);
+        // AppUtils.oneTimeSnackBar("Password mismatch",
+        //     context: context, bgColor: ColorTheme.red);
         log("Else Condition >> Api failed");
       }
     });
