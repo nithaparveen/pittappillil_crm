@@ -15,9 +15,11 @@ class NavigationBarScreen extends StatefulWidget {
 class _NavigationBarScreenState extends State<NavigationBarScreen> {
   @override
   void initState() {
-    Provider.of<BottomNavigationController>(context, listen: false)
-        .selectedIndex = 0;
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<BottomNavigationController>(context, listen: false)
+          .selectedIndex = 0;
+    });
   }
 
   @override

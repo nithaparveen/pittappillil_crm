@@ -116,9 +116,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    const Divider(
-                      thickness: 0.5
-                    ),
+                    const Divider(thickness: 0.5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

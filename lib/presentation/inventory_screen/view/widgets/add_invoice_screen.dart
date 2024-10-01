@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // Import flutter_screenutil
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/view/bar_code_scanning_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddInvoiceScreen extends StatefulWidget {
   const AddInvoiceScreen({super.key});
@@ -19,9 +19,7 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil
     ScreenUtil.init(context);
-
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.all(35.0.w),

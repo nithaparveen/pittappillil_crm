@@ -9,7 +9,7 @@ import '../constants/textstyles.dart';
 
 class AppUtils {
   static Future<String?> getToken() async {
-     log("getUserToken()");
+    //  log("getUserToken()");
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? token = sharedPreferences.getString(AppConfig.token);
     log("getUserToken -> $token");

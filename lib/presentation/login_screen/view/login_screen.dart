@@ -204,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: GLTextStyles.interStyle(
                               size: 12,
                               weight: FontWeight.w400,
-                              color: Color.fromARGB(255, 142, 142, 142),
+                              color: const Color.fromARGB(255, 142, 142, 142),
                             ),
                           ),
                         )

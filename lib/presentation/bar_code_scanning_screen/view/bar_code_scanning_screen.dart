@@ -196,7 +196,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               height: 48.0,
                               text: "Submit",
                               onPressed: () {
-                               
+                                Navigator.pop(context);
                               },
                               backgroundColor: Colors.white,
                             ),
@@ -225,10 +225,14 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
             onDetect: (BarcodeCapture capture) {
               final String? code = capture.barcodes.first.rawValue;
               if (code != null) {
-                setState(() {
-                  controller.text = code;
-                });
-                Navigator.of(context).pop();
+                if (Navigator.canPop(context)) {
+                  Navigator.of(context).pop();
+                }
+                if (mounted) {
+                  setState(() {
+                    controller.text = code;
+                  });
+                }
               }
             },
           ),

@@ -5,7 +5,7 @@ import 'package:pittappillil_crm/core/utils/app_utils.dart';
 import 'package:pittappillil_crm/repository/api/bar_code_scanning_screen/model/product_model.dart';
 import 'package:pittappillil_crm/repository/api/bar_code_scanning_screen/service/scan_screen_service.dart';
 
-class ScanScreenController extends ChangeNotifier {
+class ProductScreenController extends ChangeNotifier {
   bool isLoading = false;
   List<ProductModel> productList = <ProductModel>[];
   List<ProductModel> filteredProductList = <ProductModel>[];
