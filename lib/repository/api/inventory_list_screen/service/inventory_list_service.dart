@@ -16,10 +16,10 @@ class InventoryListService {
     // }
   }
   
-  static Future<dynamic> fetchMoreLeads({required int page,required String? token}) async {
+  static Future<dynamic> fetchMoreData({required int page}) async {
     try {
       var nextPage =
-          "https://crmadmin.pittappillilonline.com/api/scanner?page=$page&api_token=$token";
+          "https://crmadmin.pittappillilonline.com/api/scanner?page=$page&api_token=${await AppUtils.getToken()}";
       var decodedData = await ApiHelper.getDataWObaseUrl(
         endPoint: nextPage,
         header: ApiHelper.getApiHeader(access: await AppUtils.getToken()),

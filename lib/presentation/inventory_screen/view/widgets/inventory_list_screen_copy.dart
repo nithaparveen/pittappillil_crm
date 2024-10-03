@@ -14,6 +14,8 @@ class InventoryListScreenV2 extends StatefulWidget {
 }
 
 class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
+  final ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -21,6 +23,22 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       fetchData();
     });
+
+    scrollController.addListener(scrollListener);
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  void scrollListener() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      fetchMoreData();
+    }
   }
 
   void fetchData() async {
@@ -28,195 +46,253 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
         .fetchData(context);
   }
 
+  void fetchMoreData() async {
+    await Provider.of<InventoryListController>(context, listen: false)
+        .fetchMoreData(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<InventoryListController>(builder: (context, controller, _) {
-      var size = MediaQuery.sizeOf(context);
-      return controller.isLoading
-          ? ShimmerEffect(size: size)
-          : Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: controller.inventoryList.length,
-                itemBuilder: (context, index) => Card(
-                  color: const Color(0xfffff6f6),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: FractionalOffset.topCenter,
-                        child: Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                              color: ColorTheme.pRedOrange,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 3, bottom: 3, left: 20, right: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.sticky_note_2_outlined,
-                                    size: 12, color: Colors.white),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  "${controller.inventoryList[index].invoiceId}",
-                                  style: GLTextStyles.robotoStyle(
-                                      size: 12,
-                                      weight: FontWeight.w400,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "BRAND",
-                                      style: GLTextStyles.robotoStyle(
-                                          color: const Color(0xff868686),
-                                          size: 10,
-                                          weight: FontWeight.w400),
+    return Consumer<InventoryListController>(
+      builder: (context, controller, _) {
+        var size = MediaQuery.of(context).size;
+        return controller.isLoading
+            ? ShimmerEffect(size: size)
+            : RefreshIndicator(
+                strokeWidth: 1.8,
+                backgroundColor: Colors.white,
+                color: ColorTheme.pRedOrange,
+                onRefresh: () async {
+                  await Provider.of<InventoryListController>(context,
+                          listen: false)
+                      .fetchData(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                  child: ListView.builder(
+                    controller: scrollController,
+                    itemCount: controller.inventoryList.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < controller.inventoryList.length) {
+                        return Card(
+                          color: const Color(0xfffff6f6),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: FractionalOffset.topCenter,
+                                child: Container(
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    color: ColorTheme.pRedOrange,
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.branding_watermark_outlined,
-                                          size: 16,
-                                          color: Color(0xff868686),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          "${controller.inventoryList[index].brand?.name ?? "N/A"} ",
-                                          style: GLTextStyles.robotoStyle(
-                                              color: ColorTheme.pBlue,
-                                              size: 14,
-                                              weight: FontWeight.w500),
-                                        ),
-                                      ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 3,
+                                      bottom: 3,
+                                      left: 20,
+                                      right: 20,
                                     ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "CATEGORY",
-                                      style: GLTextStyles.robotoStyle(
-                                          color: const Color(0xff868686),
-                                          size: 10,
-                                          weight: FontWeight.w400),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.category,
-                                            size: 16, color: Color(0xff868686)),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          "${controller.inventoryList[index].category?.name ?? "N/A"} ",
-                                          style: GLTextStyles.robotoStyle(
-                                              color: ColorTheme.pBlue,
-                                              size: 14,
-                                              weight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            const Divider(
-                              thickness: 0.5,
-                            ),
-                            Text(
-                              "BARCODE:",
-                              style: GLTextStyles.robotoStyle(
-                                  color: ColorTheme.pRedOrange,
-                                  size: 12,
-                                  weight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.qr_code_scanner,
-                                      size: 16,
-                                      color: Colors.grey[700],
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      "${controller.inventoryList[index].barcode1 ?? "N/A"} ",
-                                      style: GLTextStyles.robotoStyle(
-                                        color: ColorTheme.pBlue,
-                                        size: 12,
-                                        weight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 16),
-                                if (controller.inventoryList[index].barcode2 !=
-                                    null)
-                                  Flexible(
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.qr_code_scanner,
-                                          size: 16,
-                                          color: Colors.grey[700],
+                                        const Icon(
+                                          Icons.sticky_note_2_outlined,
+                                          size: 12,
+                                          color: Colors.white,
                                         ),
-                                        const SizedBox(width: 4),
-                                        Flexible(
-                                          child: Text(
-                                            "${controller.inventoryList[index].barcode2}"
-                                                .toUpperCase(),
-                                            style: GLTextStyles.robotoStyle(
-                                              color: ColorTheme.pBlue,
-                                              size: 12,
-                                              weight: FontWeight.w400,
-                                            ),
-                                            softWrap: true,
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          "${controller.inventoryList[index].invoiceId}",
+                                          style: GLTextStyles.robotoStyle(
+                                            size: 12,
+                                            weight: FontWeight.w400,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "BRAND",
+                                              style: GLTextStyles.robotoStyle(
+                                                color: const Color(0xff868686),
+                                                size: 10,
+                                                weight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons
+                                                      .branding_watermark_outlined,
+                                                  size: 16,
+                                                  color: Color(0xff868686),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  "${controller.inventoryList[index].brand?.name ?? "N/A"} ",
+                                                  style:
+                                                      GLTextStyles.robotoStyle(
+                                                    color: ColorTheme.pBlue,
+                                                    size: 14,
+                                                    weight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "CATEGORY",
+                                              style: GLTextStyles.robotoStyle(
+                                                color: const Color(0xff868686),
+                                                size: 10,
+                                                weight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.category,
+                                                  size: 16,
+                                                  color: Color(0xff868686),
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  "${controller.inventoryList[index].category?.name ?? "N/A"} ",
+                                                  style:
+                                                      GLTextStyles.robotoStyle(
+                                                    color: ColorTheme.pBlue,
+                                                    size: 14,
+                                                    weight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    const Divider(thickness: 0.5),
+                                    Text(
+                                      "BARCODE:",
+                                      style: GLTextStyles.robotoStyle(
+                                        color: ColorTheme.pRedOrange,
+                                        size: 12,
+                                        weight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.qr_code_scanner,
+                                              size: 16,
+                                              color: Colors.grey[700],
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              "${controller.inventoryList[index].barcode1 ?? "N/A"} ",
+                                              style: GLTextStyles.robotoStyle(
+                                                color: ColorTheme.pBlue,
+                                                size: 12,
+                                                weight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(width: 16),
+                                        if (controller.inventoryList[index]
+                                                .barcode2 !=
+                                            null)
+                                          Flexible(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.qr_code_scanner,
+                                                  size: 16,
+                                                  color: Colors.grey[700],
+                                                ),
+                                                const SizedBox(width: 4),
+                                                Flexible(
+                                                  child: Text(
+                                                    "${controller.inventoryList[index].barcode2}"
+                                                        .toUpperCase(),
+                                                    style: GLTextStyles
+                                                        .robotoStyle(
+                                                      color: ColorTheme.pBlue,
+                                                      size: 12,
+                                                      weight: FontWeight.w400,
+                                                    ),
+                                                    softWrap: true,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else if (controller.isMoreLoading) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                              color: ColorTheme.pRedOrange,
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    },
                   ),
                 ),
-              ),
-            );
-    });
+              );
+      },
+    );
   }
 }

@@ -10,14 +10,12 @@ class InventoryListController extends ChangeNotifier {
   bool isLoading = false;
   bool isMoreLoading = false;
   int currentPage = 1;
-  // InventoryListModel inventoryListModel = InventoryListModel();
   List<InventoryModel> inventoryList = <InventoryModel>[];
 
   Future<void> fetchData(BuildContext context) async {
     isLoading = true;
     currentPage = 1;
     inventoryList = [];
-    // inventoryListModel = InventoryListModel();
     notifyListeners();
 
     final resp = await InventoryListService.fetchData(page: currentPage);
@@ -35,7 +33,7 @@ class InventoryListController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchMoreProjects(BuildContext context) async {
+  Future<void> fetchMoreData(BuildContext context) async {
     if (isMoreLoading) return;
     isMoreLoading = true;
     notifyListeners();
@@ -43,7 +41,7 @@ class InventoryListController extends ChangeNotifier {
     try {
       currentPage++;
 
-      final resp = await InventoryListService.fetchData(page: currentPage);
+      final resp = await InventoryListService.fetchMoreData(page: currentPage);
       if (resp != null && resp["status"] == "success") {
         var data = inventoryModelsFromJson(jsonEncode(resp["data"]['data']));
         inventoryList.addAll(data);
