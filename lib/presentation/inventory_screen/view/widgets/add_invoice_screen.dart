@@ -1,5 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
@@ -59,10 +61,12 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
               text: "Submit",
               onPressed: () async {
                 await storeInvoiceNumber();
+                String invoiceId = invoiceController.text;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BarcodeScanScreen(),
+                    builder: (context) =>
+                        BarcodeScanScreen(invoiceId: invoiceId),
                   ),
                 );
               },
@@ -77,6 +81,6 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
   Future<void> storeInvoiceNumber() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('invoice_id', invoiceController.text);
-    print("Invoice Number Saved: ${invoiceController.text}");
+    log("Invoice Number Saved: ${invoiceController.text}");
   }
 }

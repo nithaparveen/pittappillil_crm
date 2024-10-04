@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/utils/app_utils.dart';
@@ -11,16 +12,18 @@ class ScanScreenController extends ChangeNotifier {
   List<ProductModel> filteredProductList = <ProductModel>[];
   TextEditingController searchController = TextEditingController();
   bool isListVisible = false;
+  String? productId;
 
-  Future<void> fetchData(BuildContext context) async {
+  Future<void> fetchProducts(String keyword, BuildContext context) async {
+    log("SearchController -> fetchProducts()");
     isLoading = true;
-    productList = [];
+    filteredProductList = [];
     notifyListeners();
 
     try {
-      final resp = await ScanScreenService.fetchData();
+      final resp = await ScanScreenService.searchProduct(keyword);
       if (resp?["status"] == "success") {
-        productList = productModelsFromJson(jsonEncode(resp!["data"]));
+        productList = productModelsFromJson(jsonEncode(resp!["data"]['data']));
         filteredProductList = productList;
       } else {
         AppUtils.oneTimeSnackBar(
@@ -37,6 +40,7 @@ class ScanScreenController extends ChangeNotifier {
       );
     } finally {
       isLoading = false;
+      isListVisible = keyword.isNotEmpty;
       notifyListeners();
     }
   }
@@ -59,7 +63,57 @@ class ScanScreenController extends ChangeNotifier {
 
   void selectProduct(ProductModel product) {
     searchController.text = product.productName ?? '';
+    productId = product.id?.toString();
     isListVisible = false;
     notifyListeners();
   }
+
+  Future<void> storeData(String? remark, String? barOne, String? barTwo,
+    String? productId, String? invoiceId, BuildContext context) async {
+  log("SearchController -> storeData()");
+
+  try {
+    final value = await ScanScreenService.storeData(
+        remark, barOne, barTwo, productId, invoiceId);
+
+    if (value["status"] == "success") {
+      // Show snackbar using the current ScaffoldMessenger context
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              value["message"],
+              style: const TextStyle(fontSize: 18),
+            ),
+          ),
+        );
+      }
+    } else {
+      if (value["status"] == "error" && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              value["message"],
+              style: const TextStyle(fontSize: 18),
+            ),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            "Network Error: Unable to fetch data",
+            style: TextStyle(fontSize: 18),
+          ),
+          backgroundColor: ColorTheme.red,
+        ),
+      );
+    }
+  }
+}
+
 }

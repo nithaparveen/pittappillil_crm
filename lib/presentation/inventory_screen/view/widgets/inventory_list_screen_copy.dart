@@ -16,6 +16,7 @@ class InventoryListScreenV2 extends StatefulWidget {
 class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
   final ScrollController scrollController = ScrollController();
 
+
   @override
   void initState() {
     super.initState();

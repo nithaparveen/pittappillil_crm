@@ -32,7 +32,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = context.read<ScanScreenController>();
-      controller.fetchData(context);
+      controller.fetchProducts("",context);
     });
   }
 

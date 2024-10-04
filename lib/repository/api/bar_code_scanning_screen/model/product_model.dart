@@ -1,7 +1,10 @@
 import 'dart:convert';
-List<ProductModel> productModelsFromJson(String str) => List<ProductModel>.from(json.decode(str).map((x) => ProductModel.fromJson(x)));
 
-String productModelsToJson(List<ProductModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+List<ProductModel> productModelsFromJson(String str) =>
+    List<ProductModel>.from(json.decode(str).map((x) => ProductModel.fromJson(x)));
+
+String productModelsToJson(List<ProductModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 ProductModel productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
 

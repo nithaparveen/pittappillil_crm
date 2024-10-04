@@ -29,57 +29,60 @@ class _InventoryScreenState extends State<InventoryScreen>
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: ()=> FocusScope.of(context).unfocus(),
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: SizedBox(
-          height: 15,
-          width: 20,
-          child: Image.asset("assets/logo2.png"),
-        ),
-        title: Text(
-          "PACE-X !",
-          style: GLTextStyles.montserratStyle(
-            size: 32,
-            weight: FontWeight.w700,
-            color: ColorTheme.pink,
-            // height: 68 / 39,
-            letterSpacing: -0.3,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: SizedBox(
+            height: 15,
+            width: 20,
+            child: Image.asset("assets/logo2.png"),
           ),
-          textAlign: TextAlign.left,
+          title: Text(
+            "PACE-X !",
+            style: GLTextStyles.montserratStyle(
+              size: 32,
+              weight: FontWeight.w700,
+              color: ColorTheme.pink,
+              // height: 68 / 39,
+              letterSpacing: -0.3,
+            ),
+            textAlign: TextAlign.left,
+          ),
+          actions: const [LogoutButton()],
+          centerTitle: true,
+          forceMaterialTransparency: true,
+          automaticallyImplyLeading: false,
+          bottom: TabBar(
+            controller: tabController,
+            labelColor: ColorTheme.pRed,
+            indicatorColor: ColorTheme.pRed,
+            indicatorWeight: 1,
+            tabs: [
+              Tab(
+                  child: Text("ADD INVOICE",
+                      style: GLTextStyles.interStyle(
+                          size: 13,
+                          color: ColorTheme.pRed,
+                          weight: FontWeight.w400))),
+              Tab(
+                  child: Text("INVENTORY LIST",
+                      style: GLTextStyles.interStyle(
+                          size: 13,
+                          color: ColorTheme.pRed,
+                          weight: FontWeight.w400))),
+            ],
+          ),
         ),
-        actions: const [LogoutButton()],
-        centerTitle: true,
-        forceMaterialTransparency: true,
-        automaticallyImplyLeading: false,
-        bottom: TabBar(
+        body: TabBarView(
           controller: tabController,
-          labelColor: ColorTheme.pRed,
-          indicatorColor: ColorTheme.pRed,
-          indicatorWeight: 1,
-          tabs: [
-            Tab(
-                child: Text("ADD INVOICE",
-                    style: GLTextStyles.interStyle(
-                        size: 13,
-                        color: ColorTheme.pRed,
-                        weight: FontWeight.w400))),
-            Tab(
-                child: Text("INVENTORY LIST",
-                    style: GLTextStyles.interStyle(
-                        size: 13,
-                        color: ColorTheme.pRed,
-                        weight: FontWeight.w400))),
+          children: const [
+            AddInvoiceScreen(),
+            InventoryListScreenV2(),
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: tabController,
-        children: const [
-          AddInvoiceScreen(),
-          InventoryListScreenV2(),
-        ],
       ),
     );
   }
