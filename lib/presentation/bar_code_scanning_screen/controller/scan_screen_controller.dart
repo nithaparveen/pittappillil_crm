@@ -69,51 +69,49 @@ class ScanScreenController extends ChangeNotifier {
   }
 
   Future<void> storeData(String? remark, String? barOne, String? barTwo,
-    String? productId, String? invoiceId, BuildContext context) async {
-  log("SearchController -> storeData()");
+      String? productId, String? invoiceId, BuildContext context) async {
+    log("SearchController -> storeData()");
 
-  try {
-    final value = await ScanScreenService.storeData(
-        remark, barOne, barTwo, productId, invoiceId);
+    try {
+      final value = await ScanScreenService.storeData(
+          remark, barOne, barTwo, productId, invoiceId);
 
-    if (value["status"] == "success") {
-      // Show snackbar using the current ScaffoldMessenger context
+      if (value["status"] == "success") {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                value["message"],
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          );
+        }
+      } else {
+        if (value["status"] == "error" && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                value["message"],
+                style: const TextStyle(fontSize: 18),
+              ),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+        }
+      }
+    } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              value["message"],
-              style: const TextStyle(fontSize: 18),
+            content: const Text(
+              "Network Error: Unable to fetch data",
+              style: TextStyle(fontSize: 18),
             ),
+            backgroundColor: ColorTheme.red,
           ),
         );
       }
-    } else {
-      if (value["status"] == "error" && context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              value["message"],
-              style: const TextStyle(fontSize: 18),
-            ),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      }
-    }
-  } catch (e) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            "Network Error: Unable to fetch data",
-            style: TextStyle(fontSize: 18),
-          ),
-          backgroundColor: ColorTheme.red,
-        ),
-      );
     }
   }
-}
-
 }

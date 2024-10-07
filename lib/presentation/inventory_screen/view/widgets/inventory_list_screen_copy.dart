@@ -69,7 +69,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                       .fetchData(context);
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                  padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                   child: ListView.builder(
                     controller: scrollController,
                     itemCount: controller.inventoryList.length + 1,
@@ -152,7 +152,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  "${controller.inventoryList[index].brand?.name ?? "N/A"} ",
+                                                  controller.inventoryList[index].brand?.name ?? "N/A",
                                                   style:
                                                       GLTextStyles.robotoStyle(
                                                     color: ColorTheme.pBlue,
@@ -186,7 +186,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  "${controller.inventoryList[index].category?.name ?? "N/A"} ",
+                                                  controller.inventoryList[index].category?.name ?? "N/A",
                                                   style:
                                                       GLTextStyles.robotoStyle(
                                                     color: ColorTheme.pBlue,
@@ -226,7 +226,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              "${controller.inventoryList[index].barcode1 ?? "N/A"} ",
+                                              controller.inventoryList[index].barcode1 ?? "N/A",
                                               style: GLTextStyles.robotoStyle(
                                                 color: ColorTheme.pBlue,
                                                 size: 12,
