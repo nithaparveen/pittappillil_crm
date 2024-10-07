@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/presentation/display_screen/view/display_screen.dart';
@@ -42,10 +43,10 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
           return BottomNavigationBar(
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.qr_code_scanner_outlined),
+                  icon: Icon(CupertinoIcons.barcode_viewfinder),
                   label: "Inventory Scanner"),
               BottomNavigationBarItem(
-                icon: Icon(Icons.qr_code_scanner_outlined),
+                icon: Icon(CupertinoIcons.barcode_viewfinder),
                 label: "Display Scanner",
               ),
             ],

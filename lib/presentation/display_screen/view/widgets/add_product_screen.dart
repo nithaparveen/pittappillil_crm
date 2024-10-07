@@ -7,6 +7,7 @@ import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
+import 'package:pittappillil_crm/presentation/display_screen/controller/product_screen_controller.dart';
 import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -21,7 +22,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController colorController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController remarkController = TextEditingController();
-  TextEditingController searchController = TextEditingController();
 
   bool isListVisible = false;
   List<dynamic> filteredProductList = [];
@@ -32,7 +32,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = context.read<ScanScreenController>();
-      controller.fetchProducts("",context);
+      controller.fetchProducts("", context);
     });
   }
 
@@ -42,160 +42,163 @@ class _AddProductScreenState extends State<AddProductScreen> {
     colorController.dispose();
     dateController.dispose();
     remarkController.dispose();
-    searchController.dispose();
     super.dispose();
-  }
-
-  void searchProducts(String query) {
-    final controller = context.read<ScanScreenController>();
-    setState(() {
-      if (query.isEmpty) {
-        filteredProductList = [];
-        isListVisible = false;
-      } else {
-        filteredProductList = controller.productList
-            .where((product) =>
-                product.productName?.toLowerCase().contains(query.toLowerCase()) ?? false)
-            .toList();
-        isListVisible = true;
-      }
-    });
-  }
-
-  void selectProduct(dynamic product) {
-    setState(() {
-      selectedProduct = product;
-      searchController.text = product.productName ?? '';
-      isListVisible = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(35.0).w,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Select Brand and Category",
-              style: GLTextStyles.montserratStyle(
-                  size: 15.sp, weight: FontWeight.w600, color: ColorTheme.pBlue),
-            ),
-            const SizedBox(height: 18),
-            Column(
-              children: [
-                CustomTextField(
-                  width: 307.0,
-                  height: 45.0,
-                  hintText: "Select Product",
-                  prefixIcon: const Icon(Icons.shopping_bag,
-                      size: 18, color: Color(0xff9c9c9c)),
-                  suffixIcon: const Icon(Icons.manage_search_rounded,
-                      size: 19, color: Color(0xff9c9c9c)),
-                  controller: searchController,
-                  onChanged: searchProducts,
-                ),
-                if (isListVisible)
-                  Container(
+    return Consumer<ProductScreenController>(builder: (context, controller, _) {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(35.0).w,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Select Brand and Category",
+                style: GLTextStyles.montserratStyle(
+                    size: 15.sp,
+                    weight: FontWeight.w600,
+                    color: ColorTheme.pBlue),
+              ),
+              const SizedBox(height: 18),
+              Column(
+                children: [
+                  CustomTextField(
                     width: 307.0,
-                    constraints: const BoxConstraints(maxHeight: 180),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filteredProductList.length,
-                      itemBuilder: (context, index) {
-                        final product = filteredProductList[index];
-                        return ListTile(
-                          title: Text(
-                            product.productName ?? '',
-                            style: GLTextStyles.montserratStyle(
-                              weight: FontWeight.w500,
-                              size: 13,
-                              color: const Color.fromARGB(255, 131, 131, 131),
-                            ),
-                          ),
-                          subtitle: Text(
-                            product.category?.name ?? '',
-                            style: GLTextStyles.montserratStyle(
-                              weight: FontWeight.w400,
-                              size: 12,
-                              color: const Color(0xff9c9c9c),
-                            ),
-                          ),
-                          onTap: () => selectProduct(product),
-                        );
-                      },
-                    ),
+                    height: 45.0,
+                    hintText: "Select Product",
+                    prefixIcon: const Icon(CupertinoIcons.bag,
+                        size: 18, color: Color(0xff9c9c9c)),
+                    suffixIcon: const Icon(Icons.manage_search_rounded,
+                        size: 19, color: Color(0xff9c9c9c)),
+                    controller: controller.searchController,
+                    onChanged: (value) {
+                      controller.fetchProducts(value, context);
+                    },
                   ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              width: 307.0,
-              height: 45.0,
-              hintText: "Color",
-              prefixIcon: const Icon(CupertinoIcons.color_filter,
-                  size: 18, color: Color(0xff9c9c9c)),
-              controller: colorController,
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              width: 307.0,
-              height: 45.0,
-              hintText: "Barcode",
-              prefixIcon: const Icon(Icons.qr_code_scanner_outlined,
-                  size: 18, color: Color(0xff9c9c9c)),
-              readOnly: true,
-              controller: barCodeController,
-              onTap: () {
-                openBarcodeScanner(controller: barCodeController);
-              },
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () => showDatePicker(context),
-              child: AbsorbPointer(
-                child: CustomTextField(
-                  width: 307.0,
-                  height: 45.0,
-                  hintText: "Date of Display",
-                  prefixIcon: const Icon(
-                    Icons.date_range_rounded,
-                    size: 18,
-                    color: Color(0xff9c9c9c),
+                  if (controller.isListVisible)
+                    Container(
+                      width: 307.0,
+                      constraints: const BoxConstraints(maxHeight: 180),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.filteredProductList.length,
+                        itemBuilder: (context, index) {
+                          final product = controller.filteredProductList[index];
+                          return ListTile(
+                            title: Text(
+                              product.productName ?? '',
+                              style: GLTextStyles.montserratStyle(
+                                weight: FontWeight.w500,
+                                size: 13,
+                                color: const Color.fromARGB(255, 131, 131, 131),
+                              ),
+                            ),
+                            subtitle: Text(
+                              product.category?.name ?? '',
+                              style: GLTextStyles.montserratStyle(
+                                weight: FontWeight.w400,
+                                size: 12,
+                                color: const Color(0xff9c9c9c),
+                              ),
+                            ),
+                            onTap: () {
+                              controller.selectProduct(product);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              CustomTextField(
+                width: 307.0,
+                height: 45.0,
+                hintText: "Color",
+                prefixIcon: const Icon(CupertinoIcons.color_filter,
+                    size: 18, color: Color(0xff9c9c9c)),
+                controller: colorController,
+              ),
+              const SizedBox(height: 10),
+              CustomTextField(
+                width: 307.0,
+                height: 45.0,
+                hintText: "Barcode",
+                prefixIcon: const Icon(CupertinoIcons.barcode_viewfinder,
+                    size: 18, color: Color(0xff9c9c9c)),
+                readOnly: true,
+                controller: barCodeController,
+                onTap: () {
+                  openBarcodeScanner(controller: barCodeController);
+                },
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => showDatePicker(context),
+                child: AbsorbPointer(
+                  child: CustomTextField(
+                    width: 307.0,
+                    height: 45.0,
+                    hintText: "Date of Display",
+                    prefixIcon: const Icon(
+                      CupertinoIcons.calendar,
+                      size: 18,
+                      color: Color(0xff9c9c9c),
+                    ),
+                    controller: dateController,
                   ),
-                  controller: dateController,
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            CustomTextField(
-              width: 307.0,
-              height: 45.0,
-              hintText: "Remarks",
-              prefixIcon: const Icon(Icons.sticky_note_2_rounded,
-                  size: 18, color: Color(0xff9c9c9c)),
-              controller: remarkController,
-            ),
-            const SizedBox(height: 10),
-            CustomButton(
+              const SizedBox(height: 10),
+              CustomTextField(
                 width: 307.0,
-                height: 48.0,
-                text: "Submit",
-                onPressed: () {
-                  // Handle submit logic here
-                },
-                backgroundColor: Colors.white)
-          ],
+                height: 45.0,
+                hintText: "Remarks",
+                prefixIcon: const Icon(CupertinoIcons.square_grid_2x2,
+                    size: 18, color: Color(0xff9c9c9c)),
+                controller: remarkController,
+              ),
+              const SizedBox(height: 10),
+              CustomButton(
+                  width: 307.0,
+                  height: 48.0,
+                  text: "Submit",
+                  onPressed: () {
+                    final selectedProductId = controller.productId;
+                    if (selectedProductId != null) {
+                      Provider.of<ProductScreenController>(context,
+                              listen: false)
+                          .storeData(
+                              remarkController.text.trim(),
+                              barCodeController.text.trim(),
+                              dateController.text.trim(),
+                              selectedProductId,
+                              colorController.text.trim(),
+                              context);
+                      remarkController.clear();
+                      barCodeController.clear();
+                      dateController.clear();
+                      colorController.clear();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("Please select a product")),
+                      );
+                    }
+                  },
+                  backgroundColor: Colors.white)
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void openBarcodeScanner({required TextEditingController controller}) {

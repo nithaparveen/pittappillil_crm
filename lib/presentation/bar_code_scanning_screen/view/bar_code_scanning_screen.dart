@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
@@ -97,7 +98,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                 width: 307.0,
                                 height: 45.0,
                                 hintText: "Select Product",
-                                prefixIcon: const Icon(Icons.shopping_bag,
+                                prefixIcon: const Icon(CupertinoIcons.bag,
                                     size: 18, color: Color(0xff9c9c9c)),
                                 suffixIcon: const Icon(
                                     Icons.manage_search_rounded,
@@ -157,7 +158,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                             height: 45.0,
                             hintText: "Barcode Indoor",
                             prefixIcon: const Icon(
-                                Icons.qr_code_scanner_outlined,
+                                CupertinoIcons.barcode_viewfinder,
                                 size: 18,
                                 color: Color(0xff9c9c9c)),
                             readOnly: true,
@@ -172,7 +173,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                             height: 45.0,
                             hintText: "Barcode Outdoor",
                             prefixIcon: const Icon(
-                                Icons.qr_code_scanner_outlined,
+                                CupertinoIcons.barcode_viewfinder,
                                 size: 18,
                                 color: Color(0xff9c9c9c)),
                             readOnly: true,
@@ -187,7 +188,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                             width: 307.0,
                             height: 45.0,
                             hintText: "Remarks",
-                            prefixIcon: const Icon(Icons.sticky_note_2_rounded,
+                            prefixIcon: const Icon(CupertinoIcons.square_grid_2x2,
                                 size: 18, color: Color(0xff9c9c9c)),
                           ),
                           const SizedBox(height: 10),
@@ -213,7 +214,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content:
-                                          Text("Please select a product.")),
+                                          Text("Please select a product")),
                                 );
                               }
                             },

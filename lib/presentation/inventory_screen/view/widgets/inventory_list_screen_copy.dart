@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/shimmer_effect.dart';
@@ -15,7 +17,6 @@ class InventoryListScreenV2 extends StatefulWidget {
 
 class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
   final ScrollController scrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -108,7 +109,9 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          "${controller.inventoryList[index].invoiceId}",
+                                          controller.inventoryList[index]
+                                                  .invoiceId ??
+                                              "N/A",
                                           style: GLTextStyles.robotoStyle(
                                             size: 12,
                                             weight: FontWeight.w400,
@@ -152,7 +155,11 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  controller.inventoryList[index].brand?.name ?? "N/A",
+                                                  controller
+                                                          .inventoryList[index]
+                                                          .brand
+                                                          ?.name ??
+                                                      "N/A",
                                                   style:
                                                       GLTextStyles.robotoStyle(
                                                     color: ColorTheme.pBlue,
@@ -180,13 +187,17 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                             Row(
                                               children: [
                                                 const Icon(
-                                                  Icons.category,
+                                                 CupertinoIcons.square_grid_2x2,
                                                   size: 16,
                                                   color: Color(0xff868686),
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  controller.inventoryList[index].category?.name ?? "N/A",
+                                                  controller
+                                                          .inventoryList[index]
+                                                          .category
+                                                          ?.name ??
+                                                      "N/A",
                                                   style:
                                                       GLTextStyles.robotoStyle(
                                                     color: ColorTheme.pBlue,
@@ -220,13 +231,15 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                         Row(
                                           children: [
                                             Icon(
-                                              Icons.qr_code_scanner,
+                                              CupertinoIcons.barcode,
                                               size: 16,
                                               color: Colors.grey[700],
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              controller.inventoryList[index].barcode1 ?? "N/A",
+                                              controller.inventoryList[index]
+                                                      .barcode1 ??
+                                                  "N/A",
                                               style: GLTextStyles.robotoStyle(
                                                 color: ColorTheme.pBlue,
                                                 size: 12,
@@ -247,7 +260,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Icon(
-                                                  Icons.qr_code_scanner,
+                                                  CupertinoIcons.barcode,
                                                   size: 16,
                                                   color: Colors.grey[700],
                                                 ),
@@ -280,9 +293,9 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(
+                            child: LoadingAnimationWidget.horizontalRotatingDots(
                               color: ColorTheme.pRedOrange,
-                              backgroundColor: Colors.transparent,
+                              size: 32,
                             ),
                           ),
                         );

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
@@ -13,7 +14,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
       child: ListView.builder(
         itemBuilder: (context, index) => Card(
           color: const Color(0xfffff6f6),
@@ -34,7 +35,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Icon(Icons.sticky_note_2_outlined,
+                        const Icon(CupertinoIcons.calendar_today,
                             size: 12, color: Colors.white),
                         Text(
                           "1234567890",
@@ -99,7 +100,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                             const SizedBox(height: 4),
                             Row(
                               children: [
-                                const Icon(Icons.category,
+                                const Icon(CupertinoIcons.square_grid_2x2,
                                     size: 16, color: Color(0xff868686)),
                                 const SizedBox(width: 4),
                                 Text(
@@ -134,7 +135,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.qr_code_scanner,
+                                  CupertinoIcons.barcode,
                                   size: 16,
                                   color: Colors.grey[700],
                                 ),
@@ -164,7 +165,7 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                             Row(
                               children: [
                                 Icon(
-                                  Icons.qr_code_scanner,
+                                  CupertinoIcons.color_filter,
                                   size: 16,
                                   color: Colors.grey[700],
                                 ),
