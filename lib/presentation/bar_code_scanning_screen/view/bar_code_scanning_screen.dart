@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -7,6 +8,7 @@ import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
+import 'package:vibration/vibration.dart';
 
 class BarcodeScanScreen extends StatefulWidget {
   const BarcodeScanScreen({super.key, required this.invoiceId});
@@ -39,7 +41,7 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -125,8 +127,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                       itemCount:
                                           controller.filteredProductList.length,
                                       itemBuilder: (context, index) {
-                                        final product =
-                                            controller.filteredProductList[index];
+                                        final product = controller
+                                            .filteredProductList[index];
                                         return ListTile(
                                           title: Text(
                                             product.productName ?? '',
@@ -166,9 +168,9 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               readOnly: true,
                               controller: indoorController,
                               onTap: () {
-                                openBarcodeScanner(controller: indoorController);
+                                openBarcodeScanner(
+                                    controller: indoorController);
                               },
-                              
                             ),
                             const SizedBox(height: 10),
                             CustomTextField(
@@ -182,7 +184,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               readOnly: true,
                               controller: outdoorController,
                               onTap: () {
-                                openBarcodeScanner(controller: outdoorController);
+                                openBarcodeScanner(
+                                    controller: outdoorController);
                               },
                             ),
                             const SizedBox(height: 10),
@@ -191,8 +194,10 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               width: 307.0,
                               height: 45.0,
                               hintText: "Remarks",
-                              prefixIcon: const Icon(CupertinoIcons.square_grid_2x2,
-                                  size: 18, color: Color(0xff9c9c9c)),
+                              prefixIcon: const Icon(
+                                  CupertinoIcons.square_grid_2x2,
+                                  size: 18,
+                                  color: Color(0xff9c9c9c)),
                             ),
                             const SizedBox(height: 10),
                             CustomButton(
@@ -237,31 +242,37 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     );
   }
 
-void openBarcodeScanner({required TextEditingController controller}) {
-  showDialog(
-    context: context,
-    builder: (context) => Dialog(
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: MobileScanner(
-          onDetect: (BarcodeCapture capture) async {
-            final String? code = capture.barcodes.first.rawValue;
-            if (code != null) {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
+  void openBarcodeScanner({required TextEditingController controller}) {
+    final player = AudioPlayer();
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: SizedBox(
+          width: 300,
+          height: 300,
+          child: MobileScanner(
+            onDetect: (BarcodeCapture capture) async {
+              final String? code = capture.barcodes.first.rawValue;
+              if (code != null) {
+                if (Navigator.canPop(context)) {
+                  Navigator.of(context).pop();
+                }
+                if (mounted) {
+                  setState(() {
+                    controller.text = code;
+                  });
+                  bool? hasVibrator = await Vibration.hasVibrator();
+                  if (hasVibrator == true) {
+                    Vibration.vibrate(duration: 100);
+                  }
+                  await player.play(AssetSource('beep.mp3'));
+                }
               }
-              if (mounted) {
-                setState(() {
-                  controller.text = code;
-                });
-              }
-            }
-          },
+            },
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

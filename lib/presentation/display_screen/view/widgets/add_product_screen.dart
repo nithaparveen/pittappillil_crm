@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +10,7 @@ import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
 import 'package:pittappillil_crm/presentation/display_screen/controller/display_screen_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -202,6 +204,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   void openBarcodeScanner({required TextEditingController controller}) {
+    final player = AudioPlayer();
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -209,7 +212,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           width: 300,
           height: 300,
           child: MobileScanner(
-            onDetect: (BarcodeCapture capture) {
+            onDetect: (BarcodeCapture capture) async {
               final String? code = capture.barcodes.first.rawValue;
               if (code != null) {
                 if (Navigator.canPop(context)) {
@@ -219,6 +222,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   setState(() {
                     controller.text = code;
                   });
+                  bool? hasVibrator = await Vibration.hasVibrator();
+                  if (hasVibrator == true) {
+                    Vibration.vibrate(duration: 100);
+                  }
+
+                  await player.play(AssetSource('beep.mp3'));
                 }
               }
             },
