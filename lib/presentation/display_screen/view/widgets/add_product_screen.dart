@@ -7,7 +7,7 @@ import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
-import 'package:pittappillil_crm/presentation/display_screen/controller/product_screen_controller.dart';
+import 'package:pittappillil_crm/presentation/display_screen/controller/display_screen_controller.dart';
 import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -48,7 +48,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    return Consumer<ProductScreenController>(builder: (context, controller, _) {
+    return Consumer<DisplayScreenController>(builder: (context, controller, _) {
       return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(35.0).w,
@@ -173,7 +173,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   onPressed: () {
                     final selectedProductId = controller.productId;
                     if (selectedProductId != null) {
-                      Provider.of<ProductScreenController>(context,
+                      Provider.of<DisplayScreenController>(context,
                               listen: false)
                           .storeData(
                               remarkController.text.trim(),

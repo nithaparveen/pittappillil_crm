@@ -5,15 +5,21 @@ import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/core/utils/app_utils.dart';
 import 'package:pittappillil_crm/repository/api/bar_code_scanning_screen/model/product_model.dart';
+import 'package:pittappillil_crm/repository/api/display_screen/model/displayModel.dart';
 import 'package:pittappillil_crm/repository/api/display_screen/service/display_service.dart';
 
-class ProductScreenController extends ChangeNotifier {
+class DisplayScreenController extends ChangeNotifier {
   bool isLoading = false;
   List<ProductModel> productList = <ProductModel>[];
   List<ProductModel> filteredProductList = <ProductModel>[];
   TextEditingController searchController = TextEditingController();
   bool isListVisible = false;
   String? productId;
+
+  bool isListLoading = false;
+  bool isMoreLoading = false;
+  int currentPage = 1;
+  List<DisplayModel> displayList = <DisplayModel>[];
 
   Future<void> fetchProducts(String keyword, BuildContext context) async {
     log("ProductScreenController -> fetchProducts()");
@@ -110,12 +116,59 @@ class ProductScreenController extends ChangeNotifier {
           SnackBar(
             content: const Text(
               "Network Error: Unable to fetch data",
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 14),
             ),
             backgroundColor: ColorTheme.red,
           ),
         );
       }
+    }
+  }
+
+  Future<void> fetchData(BuildContext context) async {
+    isListLoading = true;
+    currentPage = 1;
+    displayList = [];
+    notifyListeners();
+
+    final resp = await DisplayScreenService.fetchData(page: currentPage);
+    if (resp?["status"] == "success") {
+      displayList = displayModelsFromJson(jsonEncode(resp!["data"]["notes"]));
+    } else {
+      AppUtils.oneTimeSnackBar(
+        "Unable to fetch Data",
+        context: context,
+        bgColor: ColorTheme.red,
+      );
+    }
+    isListLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchMoreData(BuildContext context) async {
+    if (isMoreLoading) return;
+    isMoreLoading = true;
+    notifyListeners();
+
+    try {
+      currentPage++;
+
+      final resp = await DisplayScreenService.fetchMoreData(page: currentPage);
+      if (resp != null && resp["status"] == "success") {
+        var data = displayModelsFromJson(jsonEncode(resp["data"]['notes']));
+        displayList.addAll(data);
+      } else {
+        AppUtils.oneTimeSnackBar(
+          "Unable to fetch more data",
+          context: context,
+          bgColor: ColorTheme.red,
+        );
+      }
+    } catch (error) {
+      print("Error fetching more projects: $error");
+    } finally {
+      isMoreLoading = false;
+      notifyListeners();
     }
   }
 }

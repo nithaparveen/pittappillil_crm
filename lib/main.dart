@@ -4,7 +4,7 @@ import 'package:pittappillil_crm/app_config/app_config.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
 import 'package:pittappillil_crm/presentation/bottom_navigation_screen/controller/bottom_navigation_controller.dart';
 import 'package:pittappillil_crm/presentation/bottom_navigation_screen/view/bottom_navigation_screen.dart';
-import 'package:pittappillil_crm/presentation/display_screen/controller/product_screen_controller.dart';
+import 'package:pittappillil_crm/presentation/display_screen/controller/display_screen_controller.dart';
 import 'package:pittappillil_crm/presentation/inventory_screen/controller/inventory_controller.dart';
 import 'package:pittappillil_crm/presentation/login_screen/controller/login_controller.dart';
 import 'package:pittappillil_crm/presentation/login_screen/view/login_screen.dart';
@@ -20,7 +20,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => LoginController()),
     ChangeNotifierProvider(create: (context) => InventoryListController()),
     ChangeNotifierProvider(create: (context) => ScanScreenController()),
-    ChangeNotifierProvider(create: (context) => ProductScreenController()),
+    ChangeNotifierProvider(create: (context) => DisplayScreenController()),
   ], child: MyApp(isLoggedIn: loggedIn ?? false)));
 }
 

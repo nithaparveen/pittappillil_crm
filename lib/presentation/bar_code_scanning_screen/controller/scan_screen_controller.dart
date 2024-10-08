@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
+import 'package:pittappillil_crm/core/constants/textstyles.dart';
 import 'package:pittappillil_crm/core/utils/app_utils.dart';
 import 'package:pittappillil_crm/repository/api/bar_code_scanning_screen/model/product_model.dart';
 import 'package:pittappillil_crm/repository/api/bar_code_scanning_screen/service/scan_screen_service.dart';
@@ -82,8 +83,10 @@ class ScanScreenController extends ChangeNotifier {
             SnackBar(
               content: Text(
                 value["message"],
-                style: const TextStyle(fontSize: 18),
+                style: GLTextStyles.cabinStyle(
+                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
               ),
+              backgroundColor: const Color.fromARGB(255, 97, 182, 86),
             ),
           );
         }
@@ -93,9 +96,10 @@ class ScanScreenController extends ChangeNotifier {
             SnackBar(
               content: Text(
                 value["message"],
-                style: const TextStyle(fontSize: 18),
+                style: GLTextStyles.cabinStyle(
+                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
               ),
-              backgroundColor: Colors.redAccent,
+              backgroundColor: Colors.red,
             ),
           );
         }
@@ -106,7 +110,7 @@ class ScanScreenController extends ChangeNotifier {
           SnackBar(
             content: const Text(
               "Network Error: Unable to fetch data",
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 14),
             ),
             backgroundColor: ColorTheme.red,
           ),

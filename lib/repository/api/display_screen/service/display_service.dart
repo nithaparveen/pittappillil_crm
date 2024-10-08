@@ -24,4 +24,27 @@ class DisplayScreenService {
       log("$e");
     }
   }
+
+  static Future<Map<String, dynamic>?> fetchData({required int page}) async {
+    var decodedData = await ApiHelper.getData(
+      endPoint:
+          "scanner/display-product?page=$page&api_token=${await AppUtils.getToken()}",
+      header: ApiHelper.getApiHeader(access: await AppUtils.getToken()),
+    );
+    return decodedData is Map<String, dynamic> ? decodedData : null;
+  }
+
+  static Future<dynamic> fetchMoreData({required int page}) async {
+    try {
+      var nextPage =
+          "https://crmadmin.pittappillilonline.com/api/scanner/display-product?page=$page&api_token=${await AppUtils.getToken()}";
+      var decodedData = await ApiHelper.getDataWObaseUrl(
+        endPoint: nextPage,
+        header: ApiHelper.getApiHeader(access: await AppUtils.getToken()),
+      );
+      return decodedData;
+    } catch (e) {
+      throw Exception('Failed to fetch leads');
+    }
+  }
 }
