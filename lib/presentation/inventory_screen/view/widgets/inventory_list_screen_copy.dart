@@ -151,7 +151,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                   Icons
                                                       .branding_watermark_outlined,
                                                   size: 16,
-                                                  color: Color(0xff868686),
+                                                  color: Color.fromARGB(255, 75, 66, 66),
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(

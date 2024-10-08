@@ -120,72 +120,44 @@ class _DisplayListScreenState extends State<DisplayListScreen> {
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "BRAND",
-                                            style: GLTextStyles.robotoStyle(
-                                                color: const Color(0xff868686),
-                                                size: 10,
-                                                weight: FontWeight.w400),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                Icons
-                                                    .branding_watermark_outlined,
-                                                size: 16,
-                                                color: Color(0xff868686),
-                                              ),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                "${controller.displayList[index].brand?.name ?? "N/A"} ",
-                                                style: GLTextStyles.robotoStyle(
-                                                    color: ColorTheme.pBlue,
-                                                    size: 14,
-                                                    weight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                      Text(
+                                        "PRODUCT",
+                                        style: GLTextStyles.robotoStyle(
+                                          color: const Color(0xff868686),
+                                          size: 10,
+                                          weight: FontWeight.w400,
+                                        ),
                                       ),
-                                      Column(
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "CATEGORY",
-                                            style: GLTextStyles.robotoStyle(
-                                                color: const Color(0xff868686),
-                                                size: 10,
-                                                weight: FontWeight.w400),
+                                           Icon(
+                                            Icons.arrow_right,
+                                            size: 16,
+                                            color:
+                                                ColorTheme.pRedOrange,
                                           ),
-                                          const SizedBox(height: 4),
-                                          Row(
-                                            children: [
-                                              const Icon(
-                                                  CupertinoIcons
-                                                      .square_grid_2x2,
-                                                  size: 16,
-                                                  color: Color(0xff868686)),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                "${controller.displayList[index].category?.name ?? "N/A"} ",
-                                                style: GLTextStyles.robotoStyle(
-                                                    color: ColorTheme.pBlue,
-                                                    size: 14,
-                                                    weight: FontWeight.w500),
+                                          const SizedBox(width: 4),
+                                          Flexible(
+                                            child: Text(
+                                              controller.displayList[index]
+                                                      .product?.productName ??
+                                                  "N/A",
+                                              style: GLTextStyles.robotoStyle(
+                                                color: ColorTheme.pBlue,
+                                                size: 14,
+                                                weight: FontWeight.w500,
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),

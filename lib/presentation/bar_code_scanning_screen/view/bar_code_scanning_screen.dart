@@ -244,7 +244,6 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
 
   void openBarcodeScanner({required TextEditingController controller}) {
     final player = AudioPlayer();
-
     showDialog(
       context: context,
       builder: (context) => Dialog(

@@ -22,7 +22,7 @@ class DisplayScreenController extends ChangeNotifier {
   List<DisplayModel> displayList = <DisplayModel>[];
 
   Future<void> fetchProducts(String keyword, BuildContext context) async {
-    log("ProductScreenController -> fetchProducts()");
+    log("DisplayScreenController -> fetchProducts()");
     isLoading = true;
     filteredProductList = [];
     notifyListeners();
@@ -75,13 +75,13 @@ class DisplayScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> storeData(String? remark, String? barCode, String? date,
-      String? productId, String? color, BuildContext context) async {
-    log("SearchController -> storeData()");
+  Future<void> storeData(String? productId, String? color, String? barCode,
+      String? date, String? remark, BuildContext context) async {
+    log("DisplayScreenController -> storeData()");
 
     try {
       final value = await DisplayScreenService.storeData(
-          remark, barCode, color, productId, date);
+          productId, color, barCode, date, remark);
 
       if (value["status"] == "success") {
         if (context.mounted) {
