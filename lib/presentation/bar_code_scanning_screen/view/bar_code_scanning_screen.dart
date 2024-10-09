@@ -220,9 +220,14 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                   Navigator.pop(context);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text("Please select a product")),
+                                    SnackBar(
+                                      content: Text("Please select a product",
+                                          style: GLTextStyles.cabinStyle(
+                                              color: ColorTheme.white,
+                                              weight: FontWeight.w500,
+                                              size: 14)),
+                                      backgroundColor: Colors.grey,
+                                    ),
                                   );
                                 }
                               },

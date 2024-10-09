@@ -16,16 +16,39 @@ class AddInvoiceScreen extends StatefulWidget {
 }
 
 class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
+  final String fixedInvoicePrefix = "EDDG-F6SI"; // Fixed part
   var invoiceController = TextEditingController(text: "EDDG-F6SI");
   bool isSubmitPressed = false;
 
   String? validateInvoice(String? value) {
     if (isSubmitPressed) {
-      if (value == null || value.isEmpty) {
-        return 'Please enter invoice number';
+      if (value == null || value.isEmpty || value == fixedInvoicePrefix) {
+        return 'Please enter the remaining invoice number';
       }
     }
     return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Adding a listener to control the text input behavior
+    invoiceController.addListener(() {
+      String currentText = invoiceController.text;
+
+      // Ensure the prefix stays intact and cannot be edited or deleted
+      if (!currentText.startsWith(fixedInvoicePrefix)) {
+        invoiceController.text = fixedInvoicePrefix;
+      }
+
+      // Prevent cursor from moving into the prefix part
+      if (invoiceController.selection.start < fixedInvoicePrefix.length) {
+        invoiceController.selection = TextSelection.fromPosition(
+          TextPosition(offset: fixedInvoicePrefix.length),
+        );
+      }
+    });
   }
 
   @override
@@ -46,8 +69,8 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
             SizedBox(height: 15.h),
             Image.asset(
               "assets/scan_invoice.png",
-              width: 200.w,
-              height: 200.h,
+              width: 150.w,
+              height: 170.h,
             ),
             SizedBox(height: 15.h),
             Text(
@@ -73,7 +96,8 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
                 setState(() {
                   isSubmitPressed = true;
                 });
-                if (invoiceController.text.isNotEmpty) {
+                if (invoiceController.text.isNotEmpty &&
+                    invoiceController.text != fixedInvoicePrefix) {
                   await storeInvoiceNumber();
                   String invoiceId = invoiceController.text;
                   Navigator.push(

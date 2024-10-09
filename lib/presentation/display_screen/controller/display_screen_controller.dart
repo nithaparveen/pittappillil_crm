@@ -171,4 +171,50 @@ class DisplayScreenController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deleteData(String? id, BuildContext context) async {
+    log("DisplayScreenController -> deleteData()");
+    try {
+      final value = await DisplayScreenService.deleteData(id);
+      if (value["status"] == "success") {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                value["message"],
+                style: GLTextStyles.cabinStyle(
+                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
+              ),
+              backgroundColor: const Color.fromARGB(255, 97, 182, 86),
+            ),
+          );
+        }
+      } else {
+        if (value["status"] == "error" && context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                value["message"],
+                style: GLTextStyles.cabinStyle(
+                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text(
+              "Network Error: Unable to fetch data",
+              style: TextStyle(fontSize: 14),
+            ),
+            backgroundColor: ColorTheme.red,
+          ),
+        );
+      }
+    }
+  }
 }

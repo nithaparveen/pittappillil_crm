@@ -25,6 +25,17 @@ class DisplayScreenService {
     }
   }
 
+  static Future<dynamic> deleteData(String? id) async {
+    try {
+      var decodedData = await ApiHelper.getData(
+          endPoint:
+              "scanner/display-product/delete?api_token=${await AppUtils.getToken()}&id=$id");
+      return decodedData;
+    } catch (e) {
+      log("$e");
+    }
+  }
+
   static Future<Map<String, dynamic>?> fetchData({required int page}) async {
     var decodedData = await ApiHelper.getData(
       endPoint:

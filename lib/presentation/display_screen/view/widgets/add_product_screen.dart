@@ -188,10 +188,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       barCodeController.clear();
                       dateController.clear();
                       colorController.clear();
+                      controller.searchController.clear();
+                      controller.productId = null;
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Please select a product")),
+                        SnackBar(
+                          content: Text("Please select a product",
+                              style: GLTextStyles.cabinStyle(
+                                  color: ColorTheme.white,
+                                  weight: FontWeight.w500,
+                                  size: 14)),
+                          backgroundColor: Colors.grey,
+                        ),
                       );
                     }
                   },
