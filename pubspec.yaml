@@ -49,6 +49,7 @@ dependencies:
   vibration:
   audioplayers:
   flutter_slidable: ^3.1.1
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:

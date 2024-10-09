@@ -15,11 +15,8 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(
-        Icons.logout_outlined,
-        size: 20,
-        color: Colors.black,
-      ),
+      icon:
+          const Icon(Icons.logout_outlined, size: 20, color: Color(0xff9c9c9c)),
       onPressed: () => _showLogoutConfirmation(context),
     );
   }

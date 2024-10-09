@@ -9,6 +9,7 @@ import 'package:pittappillil_crm/global_widgets/elevated_button.dart';
 import 'package:pittappillil_crm/global_widgets/textfield.dart';
 import 'package:pittappillil_crm/presentation/bar_code_scanning_screen/controller/scan_screen_controller.dart';
 import 'package:pittappillil_crm/presentation/display_screen/controller/display_screen_controller.dart';
+import 'package:pittappillil_crm/presentation/thank_you_screen/view/thank_you_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
@@ -168,42 +169,61 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 controller: remarkController,
               ),
               const SizedBox(height: 10),
-              CustomButton(
-                  width: 307.0,
-                  height: 48.0,
-                  text: "Submit",
-                  onPressed: () {
-                    final selectedProductId = controller.productId;
-                    if (selectedProductId != null) {
-                      Provider.of<DisplayScreenController>(context,
-                              listen: false)
-                          .storeData(
-                              remarkController.text.trim(),
-                              barCodeController.text.trim(),
-                              dateController.text.trim(),
-                              selectedProductId,
-                              colorController.text.trim(),
-                              context);
-                      remarkController.clear();
-                      barCodeController.clear();
-                      dateController.clear();
-                      colorController.clear();
-                      controller.searchController.clear();
-                      controller.productId = null;
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Please select a product",
-                              style: GLTextStyles.cabinStyle(
-                                  color: ColorTheme.white,
-                                  weight: FontWeight.w500,
-                                  size: 14)),
-                          backgroundColor: Colors.grey,
+               CustomButton(
+                width: 307.0,
+                height: 48.0,
+                text: "Submit",
+                onPressed: () {
+                  final selectedProductId = controller.productId;
+                  if (selectedProductId != null) {
+                    String productName = controller.searchController.text.trim();
+                    String color = colorController.text.trim();
+                    String barcode = barCodeController.text.trim();
+
+                    Provider.of<DisplayScreenController>(context, listen: false)
+                        .storeData(
+                            remarkController.text.trim(),
+                            barcode,
+                            dateController.text.trim(),
+                            selectedProductId,
+                            color,
+                            context);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ThankYouScreen(
+                          productName: productName,
+                          barcode: barcode,
+                          color: color,
                         ),
-                      );
-                    }
-                  },
-                  backgroundColor: Colors.white)
+                      ),
+                    );
+
+                    // Clear the fields after navigation
+                    remarkController.clear();
+                    barCodeController.clear();
+                    dateController.clear();
+                    colorController.clear();
+                    controller.searchController.clear();
+                    controller.productId = null;
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Please select a product",
+                          style: GLTextStyles.cabinStyle(
+                              color: ColorTheme.white,
+                              weight: FontWeight.w500,
+                              size: 14),
+                        ),
+                        backgroundColor: Colors.grey,
+                      ),
+                    );
+                  }
+                },
+                backgroundColor: Colors.white,
+              )
             ],
           ),
         ),

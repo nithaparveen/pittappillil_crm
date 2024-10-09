@@ -77,6 +77,16 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                   ),
                 ),
               ),
+              Positioned(
+                top: 35,
+                right: 22,
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon:
+                        Icon(Icons.cancel_outlined, color: Color(0xff9c9c9c))),
+              ),
               Consumer<ScanScreenController>(builder: (context, controller, _) {
                 return Padding(
                   padding: const EdgeInsets.only(left: 32, right: 32),
