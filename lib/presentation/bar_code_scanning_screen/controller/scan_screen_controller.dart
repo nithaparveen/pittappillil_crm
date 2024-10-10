@@ -69,53 +69,63 @@ class ScanScreenController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> storeData(String? remark, String? barOne, String? barTwo,
-      String? productId, String? invoiceId, BuildContext context) async {
-    log("SearchController -> storeData()");
+ Future<Map<String, dynamic>> storeData(
+  String? remark,
+  String? barOne,
+  String? barTwo,
+  String? productId,
+  String? invoiceId,
+  BuildContext context,
+) async {
+  log("SearchController -> storeData()");
 
-    try {
-      final value = await ScanScreenService.storeData(
-          remark, barOne, barTwo, productId, invoiceId);
+  try {
+    final value = await ScanScreenService.storeData(
+      remark, barOne, barTwo, productId, invoiceId,
+    );
 
-      if (value["status"] == "success") {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                value["message"],
-                style: GLTextStyles.cabinStyle(
-                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
-              ),
-              backgroundColor: const Color.fromARGB(255, 97, 182, 86),
-            ),
-          );
-        }
-      } else {
-        if (value["status"] == "error" && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                value["message"],
-                style: GLTextStyles.cabinStyle(
-                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
-              ),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
-    } catch (e) {
+    if (value["status"] == "success") {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              "Network Error: Unable to fetch data",
-              style: TextStyle(fontSize: 14),
+            content: Text(
+              value["message"],
+              style: GLTextStyles.cabinStyle(
+                  color: ColorTheme.white, weight: FontWeight.w500, size: 14),
             ),
-            backgroundColor: ColorTheme.red,
+            backgroundColor: const Color.fromARGB(255, 97, 182, 86),
           ),
         );
       }
+    } else if (value["status"] == "error" && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            value["message"],
+            style: GLTextStyles.cabinStyle(
+                color: ColorTheme.white, weight: FontWeight.w500, size: 14),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
+
+    return value; // Return the result
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            "Network Error: Unable to fetch data",
+            style: TextStyle(fontSize: 14),
+          ),
+          backgroundColor: ColorTheme.red,
+        ),
+      );
+    }
+
+    return {"status": "error", "message": "Network error occurred"};
   }
+}
+
 }

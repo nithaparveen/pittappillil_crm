@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
@@ -16,14 +17,21 @@ class AddInvoiceScreen extends StatefulWidget {
 }
 
 class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
-  final String fixedInvoicePrefix = "EDDG-F6SI"; // Fixed part
-  var invoiceController = TextEditingController(text: "EDDG-F6SI");
+  final String fixedInvoicePrefix = "EDDG-F6SI-";
+  var invoiceController = TextEditingController(text: "EDDG-F6SI-");
   bool isSubmitPressed = false;
+  FocusNode invoiceFocusNode = FocusNode();
 
   String? validateInvoice(String? value) {
     if (isSubmitPressed) {
-      if (value == null || value.isEmpty || value == fixedInvoicePrefix) {
+      if (value == null || value.isEmpty) {
         return 'Please enter the remaining invoice number';
+      }
+      if (value == fixedInvoicePrefix) {
+        return 'Please enter the remaining invoice number';
+      }
+      if (value.length != 16) {
+        return 'Invoice number must be exactly 16 digits';
       }
     }
     return null;
@@ -32,6 +40,7 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
   @override
   void initState() {
     super.initState();
+    invoiceFocusNode = FocusNode();
 
     // Adding a listener to control the text input behavior
     invoiceController.addListener(() {
@@ -49,6 +58,12 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
         );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    invoiceFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -86,6 +101,10 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
               hintText: "Invoice No.",
               width: 300.w,
               validator: validateInvoice,
+              focusNode: invoiceFocusNode,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(16),
+              ],
             ),
             SizedBox(height: 15.h),
             CustomButton(
@@ -97,8 +116,10 @@ class _AddInvoiceScreenState extends State<AddInvoiceScreen> {
                   isSubmitPressed = true;
                 });
                 if (invoiceController.text.isNotEmpty &&
-                    invoiceController.text != fixedInvoicePrefix) {
+                    invoiceController.text != fixedInvoicePrefix &&
+                    invoiceController.text.length == 16) {
                   await storeInvoiceNumber();
+                  invoiceFocusNode.unfocus();
                   String invoiceId = invoiceController.text;
                   Navigator.push(
                     context,

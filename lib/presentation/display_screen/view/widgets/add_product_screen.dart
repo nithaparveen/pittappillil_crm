@@ -169,26 +169,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 controller: remarkController,
               ),
               const SizedBox(height: 10),
-               CustomButton(
+              CustomButton(
                 width: 307.0,
                 height: 48.0,
                 text: "Submit",
                 onPressed: () {
                   final selectedProductId = controller.productId;
                   if (selectedProductId != null) {
-                    String productName = controller.searchController.text.trim();
+                    String productName =
+                        controller.searchController.text.trim();
                     String color = colorController.text.trim();
                     String barcode = barCodeController.text.trim();
 
                     Provider.of<DisplayScreenController>(context, listen: false)
                         .storeData(
-                            remarkController.text.trim(),
-                            barcode,
-                            dateController.text.trim(),
-                            selectedProductId,
-                            color,
-                            context);
-
+                      remarkController.text.trim(),
+                      barcode,
+                      dateController.text.trim(),
+                      selectedProductId,
+                      color,
+                      context,
+                    );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -199,8 +200,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                       ),
                     );
-
-                    // Clear the fields after navigation
                     remarkController.clear();
                     barCodeController.clear();
                     dateController.clear();

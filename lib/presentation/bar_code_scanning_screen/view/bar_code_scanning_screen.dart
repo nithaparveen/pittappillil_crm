@@ -84,8 +84,8 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon:
-                        Icon(Icons.cancel_outlined, color: Color(0xff9c9c9c))),
+                    icon: const Icon(Icons.cancel_outlined,
+                        color: Color(0xff9c9c9c))),
               ),
               Consumer<ScanScreenController>(builder: (context, controller, _) {
                 return Padding(
@@ -214,12 +214,15 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                               width: 307.0,
                               height: 48.0,
                               text: "Submit",
-                              onPressed: () {
+                              onPressed: () async {
                                 final selectedProductId = controller.productId;
                                 if (selectedProductId != null) {
-                                  Provider.of<ScanScreenController>(context,
-                                          listen: false)
-                                      .storeData(
+                                  // Call storeData and wait for the result
+                                  final result =
+                                      await Provider.of<ScanScreenController>(
+                                              context,
+                                              listen: false)
+                                          .storeData(
                                     remarkController.text.trim(),
                                     indoorController.text.trim(),
                                     outdoorController.text.trim(),
@@ -227,22 +230,35 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                                     widget.invoiceId,
                                     context,
                                   );
-                                  Navigator.pop(context);
+
+                                  // Navigate only if the result is successful
+                                  if (result["status"] == "success" &&
+                                      context.mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                  remarkController.clear();
+                                  indoorController.clear();
+                                  outdoorController.clear();
+                                  controller.searchController.clear();
+                                  controller.productId = null;
                                 } else {
+                                  // Show error message if no product is selected
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text("Please select a product",
-                                          style: GLTextStyles.cabinStyle(
-                                              color: ColorTheme.white,
-                                              weight: FontWeight.w500,
-                                              size: 14)),
+                                      content: Text(
+                                        "Please select a product",
+                                        style: GLTextStyles.cabinStyle(
+                                            color: ColorTheme.white,
+                                            weight: FontWeight.w500,
+                                            size: 14),
+                                      ),
                                       backgroundColor: Colors.grey,
                                     ),
                                   );
                                 }
                               },
                               backgroundColor: Colors.white,
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -257,18 +273,21 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     );
   }
 
-  void openBarcodeScanner({required TextEditingController controller}) {
-    final player = AudioPlayer();
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        child: SizedBox(
-          width: 300,
-          height: 300,
-          child: MobileScanner(
-            onDetect: (BarcodeCapture capture) async {
-              final String? code = capture.barcodes.first.rawValue;
-              if (code != null) {
+ void openBarcodeScanner({required TextEditingController controller}) {
+  final player = AudioPlayer();
+  bool errorShown = false;
+
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      child: SizedBox(
+        width: 300,
+        height: 300,
+        child: MobileScanner(
+          onDetect: (BarcodeCapture capture) async {
+            final String? code = capture.barcodes.first.rawValue;
+            if (code != null) {
+              if (code.length <= 13) {
                 if (Navigator.canPop(context)) {
                   Navigator.of(context).pop();
                 }
@@ -282,11 +301,30 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
                   }
                   await player.play(AssetSource('beep.mp3'));
                 }
+              } else if (!errorShown) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Barcode must be less than 13 digits",
+                      style: GLTextStyles.cabinStyle(
+                          color: ColorTheme.white,
+                          weight: FontWeight.w500,
+                          size: 14),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+
+                // Delay to allow the user to see the message
+                await Future.delayed(const Duration(seconds: 2));
+                errorShown = false; // Reset the flag after the delay
               }
-            },
-          ),
+            }
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

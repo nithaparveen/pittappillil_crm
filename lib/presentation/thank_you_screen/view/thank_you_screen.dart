@@ -80,21 +80,16 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 130),
+                       SizedBox(height: 130.h),
                       Center(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Lottie.asset(
-                              'assets/lottiefiles.json',
+                              'assets/successlottie.json',
                               width: 150.w,
                               height: 170.h,
                             ),
-                            // Image.asset(
-                            //   "assets/success.png",
-                            //   width: 150.w,
-                            //   height: 170.h,
-                            // ),
                             RichText(
                               text: TextSpan(
                                 children: [
@@ -102,7 +97,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                     text: "Here you go! Your ",
                                     style: GLTextStyles.montserratStyle(
                                       color: ColorTheme.pBlue,
-                                      size: 15,
+                                      size: 15.sp,
                                       weight: FontWeight.w400,
                                     ),
                                   ),
@@ -110,7 +105,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                     text: "product \nhas been added ",
                                     style: GLTextStyles.montserratStyle(
                                       color: ColorTheme.pBlue,
-                                      size: 15,
+                                      size: 15.sp,
                                       weight: FontWeight.w600,
                                     ),
                                   ),
@@ -118,14 +113,14 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                     text: "to the list",
                                     style: GLTextStyles.montserratStyle(
                                       color: ColorTheme.pBlue,
-                                      size: 15,
+                                      size: 15.sp,
                                       weight: FontWeight.w400,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 15),
+                            SizedBox(height: 15.h),
                             Card(
                               color: const Color(0xfffff6f6),
                               child: Column(
@@ -148,7 +143,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                               "PRODUCT",
                                               style: GLTextStyles.robotoStyle(
                                                 color: const Color(0xff868686),
-                                                size: 10,
+                                                size: 10.sp,
                                                 weight: FontWeight.w400,
                                               ),
                                             ),
@@ -158,7 +153,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                               children: [
                                                 Icon(
                                                   Icons.arrow_right,
-                                                  size: 16,
+                                                  size: 16.sp,
                                                   color: ColorTheme.pRedOrange,
                                                 ),
                                                 const SizedBox(width: 4),
@@ -168,7 +163,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                                     style: GLTextStyles
                                                         .robotoStyle(
                                                       color: ColorTheme.pBlue,
-                                                      size: 14,
+                                                      size: 14.sp,
                                                       weight: FontWeight.w500,
                                                     ),
                                                   ),
@@ -177,8 +172,8 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 5),
-                                        const Divider(thickness: 0.5),
+                                         SizedBox(height: 5.h),
+                                         Divider(thickness: 0.5.sp),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
@@ -193,26 +188,26 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                                       GLTextStyles.robotoStyle(
                                                           color: ColorTheme
                                                               .pRedOrange,
-                                                          size: 12,
+                                                          size: 12.sp,
                                                           weight:
                                                               FontWeight.w500),
                                                 ),
-                                                const SizedBox(height: 4),
+                                                SizedBox(height: 4.h),
                                                 Row(
                                                   children: [
                                                     Icon(
                                                       CupertinoIcons.barcode,
-                                                      size: 16,
+                                                      size: 16.sp,
                                                       color: Colors.grey[700],
                                                     ),
-                                                    const SizedBox(width: 4),
+                                                   SizedBox(width: 4.w),
                                                     Text(
                                                       widget.barcode,
                                                       style: GLTextStyles
                                                           .robotoStyle(
                                                               color: ColorTheme
                                                                   .pBlue,
-                                                              size: 12,
+                                                              size: 12.sp,
                                                               weight: FontWeight
                                                                   .w400),
                                                     ),
@@ -230,27 +225,27 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                                                       GLTextStyles.robotoStyle(
                                                           color: ColorTheme
                                                               .pRedOrange,
-                                                          size: 12,
+                                                          size: 12.sp,
                                                           weight:
                                                               FontWeight.w500),
                                                 ),
-                                                const SizedBox(height: 4),
+                                               SizedBox(height: 4.h),
                                                 Row(
                                                   children: [
                                                     Icon(
                                                       CupertinoIcons
                                                           .color_filter,
-                                                      size: 16,
+                                                      size: 16.sp,
                                                       color: Colors.grey[700],
                                                     ),
-                                                    const SizedBox(width: 4),
+                                                   SizedBox(width: 4.w),
                                                     Text(
                                                       widget.color,
                                                       style: GLTextStyles
                                                           .robotoStyle(
                                                               color: ColorTheme
                                                                   .pBlue,
-                                                              size: 12,
+                                                              size: 12.sp,
                                                               weight: FontWeight
                                                                   .w400),
                                                     ),

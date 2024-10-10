@@ -85,16 +85,17 @@ class DisplayScreenController extends ChangeNotifier {
 
       if (value["status"] == "success") {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                value["message"],
-                style: GLTextStyles.cabinStyle(
-                    color: ColorTheme.white, weight: FontWeight.w500, size: 14),
-              ),
-              backgroundColor: const Color.fromARGB(255, 97, 182, 86),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(
+          //       value["message"],
+          //       style: GLTextStyles.cabinStyle(
+          //           color: ColorTheme.white, weight: FontWeight.w500, size: 14),
+          //     ),
+          //     duration: const Duration(seconds: 1, milliseconds: 50),
+          //     backgroundColor: const Color.fromARGB(255, 97, 182, 86),
+          //   ),
+          // );
         }
       } else {
         if (value["status"] == "error" && context.mounted) {
@@ -105,6 +106,7 @@ class DisplayScreenController extends ChangeNotifier {
                 style: GLTextStyles.cabinStyle(
                     color: ColorTheme.white, weight: FontWeight.w500, size: 14),
               ),
+              duration: const Duration(seconds: 1, milliseconds: 50),
               backgroundColor: Colors.red,
             ),
           );

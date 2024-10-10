@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 
 class CustomButton extends StatelessWidget {
@@ -51,7 +52,7 @@ class CustomButton extends StatelessWidget {
           text,
           style: GLTextStyles.montserratStyle(
             weight: FontWeight.w500,
-            size: 14,
+            size: 14.sp,
             color: textColor ?? const Color(0xffcc0033),
           ),
         ),

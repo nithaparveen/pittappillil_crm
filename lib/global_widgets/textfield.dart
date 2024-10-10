@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pittappillil_crm/core/constants/colors.dart';
 import 'package:pittappillil_crm/core/constants/textstyles.dart';
 
@@ -15,6 +16,8 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool readOnly;
   final String? Function(String?)? validator;
+  final FocusNode? focusNode;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -30,6 +33,8 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.readOnly = false,
     this.validator,
+    this.focusNode,
+    this.inputFormatters,
   });
 
   @override
@@ -55,6 +60,7 @@ class CustomTextField extends StatelessWidget {
             onChanged: onChanged,
             onTap: onTap,
             readOnly: readOnly,
+            focusNode: focusNode,
             decoration: InputDecoration(
               prefixIcon: prefixIcon,
               suffixIcon: suffixIcon,
