@@ -273,58 +273,55 @@ class _BarcodeScanScreenState extends State<BarcodeScanScreen> {
     );
   }
 
- void openBarcodeScanner({required TextEditingController controller}) {
-  final player = AudioPlayer();
-  bool errorShown = false;
-
-  showDialog(
-    context: context,
-    builder: (context) => Dialog(
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: MobileScanner(
-          onDetect: (BarcodeCapture capture) async {
-            final String? code = capture.barcodes.first.rawValue;
-            if (code != null) {
-              if (code.length <= 13) {
-                if (Navigator.canPop(context)) {
-                  Navigator.of(context).pop();
-                }
-                if (mounted) {
-                  setState(() {
-                    controller.text = code;
-                  });
-                  bool? hasVibrator = await Vibration.hasVibrator();
-                  if (hasVibrator == true) {
-                    Vibration.vibrate(duration: 100);
+  void openBarcodeScanner({required TextEditingController controller}) {
+    final player = AudioPlayer();
+    bool errorShown = false;
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: SizedBox(
+          width: 300,
+          height: 300,
+          child: MobileScanner(
+            onDetect: (BarcodeCapture capture) async {
+              final String? code = capture.barcodes.first.rawValue;
+              if (code != null) {
+                if (code.length == 13) {
+                  if (Navigator.canPop(context)) {
+                    Navigator.of(context).pop();
                   }
-                  await player.play(AssetSource('beep.mp3'));
-                }
-              } else if (!errorShown) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "Barcode must be less than 13 digits",
-                      style: GLTextStyles.cabinStyle(
-                          color: ColorTheme.white,
-                          weight: FontWeight.w500,
-                          size: 14),
+                  if (mounted) {
+                    setState(() {
+                      controller.text = code;
+                    });
+                    bool? hasVibrator = await Vibration.hasVibrator();
+                    if (hasVibrator == true) {
+                      Vibration.vibrate(duration: 100);
+                    }
+                    await player.play(AssetSource('beep.mp3'));
+                  }
+                } else if (!errorShown) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Barcode must be exactly 13 digits",
+                        style: GLTextStyles.cabinStyle(
+                            color: ColorTheme.white,
+                            weight: FontWeight.w500,
+                            size: 14),
+                      ),
+                      backgroundColor: Colors.red,
                     ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-
-                // Delay to allow the user to see the message
-                await Future.delayed(const Duration(seconds: 2));
-                errorShown = false; // Reset the flag after the delay
+                  );
+                  errorShown = true;
+                  await Future.delayed(const Duration(seconds: 2));
+                  errorShown = false;
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

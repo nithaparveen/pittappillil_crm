@@ -128,84 +128,41 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
+                                    Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "BRAND",
-                                              style: GLTextStyles.robotoStyle(
-                                                color: const Color(0xff868686),
-                                                size: 10,
-                                                weight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons
-                                                      .branding_watermark_outlined,
-                                                  size: 16,
-                                                  color: Color.fromARGB(255, 75, 66, 66),
-                                                ),
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  controller
-                                                          .inventoryList[index]
-                                                          .brand
-                                                          ?.name ??
-                                                      "N/A",
-                                                  style:
-                                                      GLTextStyles.robotoStyle(
-                                                    color: ColorTheme.pBlue,
-                                                    size: 14,
-                                                    weight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                        Text(
+                                          "PRODUCT",
+                                          style: GLTextStyles.robotoStyle(
+                                            color: const Color(0xff868686),
+                                            size: 10,
+                                            weight: FontWeight.w400,
+                                          ),
                                         ),
-                                        Column(
+                                        Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              "CATEGORY",
-                                              style: GLTextStyles.robotoStyle(
-                                                color: const Color(0xff868686),
-                                                size: 10,
-                                                weight: FontWeight.w400,
-                                              ),
+                                            Icon(
+                                              Icons.arrow_right,
+                                              size: 16,
+                                              color: ColorTheme.pRedOrange,
                                             ),
-                                            const SizedBox(height: 4),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                 CupertinoIcons.square_grid_2x2,
-                                                  size: 16,
-                                                  color: Color(0xff868686),
+                                            const SizedBox(width: 4),
+                                            Flexible(
+                                              child: Text(
+                                                controller.inventoryList[index]
+                                                        .product?.productName ??
+                                                    "N/A",
+                                                style: GLTextStyles.robotoStyle(
+                                                  color: ColorTheme.pBlue,
+                                                  size: 14,
+                                                  weight: FontWeight.w500,
                                                 ),
-                                                const SizedBox(width: 4),
-                                                Text(
-                                                  controller
-                                                          .inventoryList[index]
-                                                          .category
-                                                          ?.name ??
-                                                      "N/A",
-                                                  style:
-                                                      GLTextStyles.robotoStyle(
-                                                    color: ColorTheme.pBlue,
-                                                    size: 14,
-                                                    weight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -224,9 +181,7 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                     const SizedBox(height: 4),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -252,12 +207,10 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                         if (controller.inventoryList[index]
                                                 .barcode2 !=
                                             null)
-                                          Flexible(
+                                          Expanded(
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                  MainAxisAlignment.end,
                                               children: [
                                                 Icon(
                                                   CupertinoIcons.barcode,
@@ -276,6 +229,9 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                                                       weight: FontWeight.w400,
                                                     ),
                                                     softWrap: true,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
                                                   ),
                                                 ),
                                               ],
@@ -293,7 +249,8 @@ class _InventoryListScreenV2State extends State<InventoryListScreenV2> {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: LoadingAnimationWidget.horizontalRotatingDots(
+                            child:
+                                LoadingAnimationWidget.horizontalRotatingDots(
                               color: ColorTheme.pRedOrange,
                               size: 32,
                             ),

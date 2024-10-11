@@ -232,6 +232,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void openBarcodeScanner({required TextEditingController controller}) {
     final player = AudioPlayer();
+    bool errorShown = false;
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -242,19 +244,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
             onDetect: (BarcodeCapture capture) async {
               final String? code = capture.barcodes.first.rawValue;
               if (code != null) {
-                if (Navigator.canPop(context)) {
-                  Navigator.of(context).pop();
-                }
-                if (mounted) {
-                  setState(() {
-                    controller.text = code;
-                  });
-                  bool? hasVibrator = await Vibration.hasVibrator();
-                  if (hasVibrator == true) {
-                    Vibration.vibrate(duration: 100);
+                if (code.length <= 13) {
+                  if (Navigator.canPop(context)) {
+                    Navigator.of(context).pop();
                   }
-
-                  await player.play(AssetSource('beep.mp3'));
+                  if (mounted) {
+                    setState(() {
+                      controller.text = code;
+                    });
+                    bool? hasVibrator = await Vibration.hasVibrator();
+                    if (hasVibrator == true) {
+                      Vibration.vibrate(duration: 100);
+                    }
+                    await player.play(AssetSource('beep.mp3'));
+                  }
+                } else if (!errorShown) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Barcode must be less than 13 digits",
+                        style: GLTextStyles.cabinStyle(
+                            color: ColorTheme.white,
+                            weight: FontWeight.w500,
+                            size: 14),
+                      ),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  await Future.delayed(const Duration(seconds: 2));
+                  errorShown = false;
                 }
               }
             },
